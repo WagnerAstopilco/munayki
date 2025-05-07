@@ -1,12 +1,24 @@
 <template>
-    <div class="d-flex flex-column align-items-center justify-content-center position-fixed bottom-0 end-0 p-5"
-        style="z-index: 1000;">
-        <div class="btn-group-vertical" role="group" aria-label="Basic example">
-            <button type="button" class="whatsapp-button">
-                <img src="/whatsapp-icon.png" alt="whatsapp" />
-            </button>
-        </div>
+  <div
+    class="d-flex flex-column align-items-center justify-content-center position-fixed bottom-0 end-0 p-5"
+    style="z-index: 1000;"
+  >
+    <div
+      class="btn-group-vertical"
+      role="group"
+      aria-label="Basic example"
+    >
+      <button
+        type="button"
+        class="whatsapp-button"
+      >
+        <img
+          src="/whatsapp-icon.png"
+          alt="whatsapp"
+        >
+      </button>
     </div>
+  </div>
 </template>
 
 <style scoped>

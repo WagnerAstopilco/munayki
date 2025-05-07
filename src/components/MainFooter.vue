@@ -1,48 +1,104 @@
 <template>
-    <footer class="bg-dark text-white pt-5">
-        <div class="container-fluid px-5">
-            <div class="row">
-                <!-- Logo y descripción -->
-                <div class="col-md-3 mb-4">
-                    <img src="/logo.png" alt="Logo" style="height: 150px;" class="mb-3">
-                    <p>Tu mejor compañero de aventuras y viajes inolvidables. ¡Descubre el mundo con nosotros!</p>
-                </div>
-
-                <!-- Navegación -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold">Categorías</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Full days</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Half days</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Nacionales</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Viajes escolares</a></li>
-                    </ul>
-                </div>
-                <!-- Acerca de -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold">Acerca de</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Nosotros</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Preguntas frecuentes</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Términos y condiciones</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Contáctanos</a></li>
-                    </ul>
-                </div>
-
-                <!-- contacto -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold">Contacto</h5>
-                    <div class="d-flex flex-column gap-3">
-                        <a href="#" class="text-white text-decoration-none"><i class="bi bi-telephone-fill"></i> +51 940 055 540</a>
-                        <a href="#" class="text-white text-decoration-none"><i class="bi bi-envelope-open-fill"></i> munaykiturismo@gmail.com</a>
-                    </div>
-                </div>
-
-            </div>
-            <div class="text-center py-3 border-top border-secondary mt-4">
-                <small>&copy; 2025 Munayki Turismo. Todos los derechos reservados.</small>
-            </div>
+  <footer class="bg-dark text-white pt-5">
+    <div class="container-fluid px-5">
+      <div class="row">
+        <!-- Logo y descripción -->
+        <div class="col-md-3 mb-4">
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style="height: 150px;"
+            class="mb-3"
+          >
+          <p>Tu mejor compañero de aventuras y viajes inolvidables. ¡Descubre el mundo con nosotros!</p>
         </div>
-    </footer>
+
+        <!-- Navegación -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">
+            Categorías
+          </h5>
+          <ul class="list-unstyled">
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Full days</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Half days</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Nacionales</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Viajes escolares</a>
+            </li>
+          </ul>
+        </div>
+        <!-- Acerca de -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">
+            Acerca de
+          </h5>
+          <ul class="list-unstyled">
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Nosotros</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Preguntas frecuentes</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Términos y condiciones</a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-white text-decoration-none"
+              >Contáctanos</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- contacto -->
+        <div class="col-md-3 mb-4">
+          <h5 class="fw-bold">
+            Contacto
+          </h5>
+          <div class="d-flex flex-column gap-3">
+            <a
+              href="#"
+              class="text-white text-decoration-none"
+            ><i class="bi bi-telephone-fill" /> +51 940 055 540</a>
+            <a
+              href="#"
+              class="text-white text-decoration-none"
+            ><i class="bi bi-envelope-open-fill" /> munaykiturismo@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="text-center py-3 border-top border-secondary mt-4">
+        <small>&copy; 2025 Munayki Turismo. Todos los derechos reservados.</small>
+      </div>
+    </div>
+  </footer>
 </template>
 
