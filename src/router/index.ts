@@ -9,19 +9,25 @@ import Categorias from '@/views/admin/Categorias.vue'
 import Destinos from '@/views/admin/Destinos.vue'
 import Actividades from '@/views/admin/Actividades.vue'
 import Productos from '@/views/admin/Productos.vue'
-
+import DetalleProducto from '@/views/public/DetalleProducto.vue'
+import Tours from '@/views/public/Tours.vue'
 
 
 const routes = [
  
+  //Pagina Web
   {
     path: '/',
     component: PublicLayout,
     children: [
       { path: '', name: 'home', component: HomeView },
+      { path: 'tours/:idtour', name: 'DetalleProducto', component: DetalleProducto },
+      { path: 'tours', name: 'Producto', component: Tours },
+     
     ],
     meta: { requiresAuth: false },
   },
+  //Dashboard
   {
     path: '/admin',
     component: AdminLayout,

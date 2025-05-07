@@ -22,8 +22,8 @@
           <template #row="{ item }">
             <tr>
               <td>{{ item.name }}</td>
-              <td>{{ destinos.find(d => d.id === item.destino_id)?.name || '—' }}</td>
-              <td>{{ categorias.find(c => c.id === item.category_id)?.name || '—' }}</td>
+              <td>--</td>
+              <td>--</td>
               <td>{{ item.number_of_days }}</td>
               <td>{{ item.number_of_nights }}</td>
               <td>{{ item.number_of_people }}</td>
@@ -165,7 +165,7 @@
     ])
     categorias.value = cat.data.data
     actividades.value = act.data.data
-    destinos.value = des.data.data
+    destinos.value = des.data
   }
   
   const abrirFormulario = (producto = null) => {

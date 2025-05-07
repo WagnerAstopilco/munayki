@@ -147,6 +147,7 @@ const guardarCategoria = async () => {
     }
 
     guardando.value = true
+    
     try {
         if (form.value.id) {
             await CategoryService.patchCategory(form.value.id, payload)

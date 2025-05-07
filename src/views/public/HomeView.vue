@@ -286,54 +286,92 @@
       </div>
     </section>
     <!-- section special offers -->
-    <section class="full-screen">
-      <div class="p-4 bg-warning">
-        <h2 class="text-center fw-bold">
-          Ofertas Especiales
-        </h2>
-      </div>
-      <div class="row h-25 p-5">
-        <div
-          class="col-md-3"
-          v-for="(oferta, index) in ofertasEspeciales"
-          :key="index"
-        >
-          <div
-            class="card oferta-card border-0 shadow-sm"
-            :style="{ backgroundImage: 'url(' + oferta.imagen + ')' }"
-          >
-            <a
-              :href="oferta.link"
-              class="d-block h-100 w-100 text-decoration-none"
-            >
-              <div class="card-img-overlay d-flex align-items-end p-3">
-                <div class="bg-dark bg-opacity-50 text-white p-3 rounded w-100 text-center">
-                  <h5 class="card-title mb-1">{{ oferta.titulo }}</h5>
-                  <p class="card-text">{{ oferta.descripcion }}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="container py-5">
+  <h2 class="mb-4 text-center fw-bold">Ofertas Especiales</h2>
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-3">
+      <img src="/images/ofertasEspeciales/huaraz-trujillo.png" alt="Oferta 1" class="img-fluid rounded shadow-sm" />
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <img src="/images/ofertasEspeciales/ica-paracas-nazca.png" alt="Oferta 2" class="img-fluid rounded shadow-sm" />
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <img src="/images/ofertasEspeciales/piura-tumbes-guayaquil.png" alt="Oferta 3" class="img-fluid rounded shadow-sm" />
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <img src="/images/ofertasEspeciales/ica-paracas-nazca.png" alt="Oferta 4" class="img-fluid rounded shadow-sm" />
+    </div>
+  </div>
+</section>
 
-    <!-- section popular destinations -->
-    <!-- <section class="full-screen">
-      <h2 class="text-center mb-4 fw-bold">Destinos Populares</h2>
-      <div class="row g-3">
-        <div class="col-6 col-md-4 hover-shadow" v-for="(destino, index) in destinosPopulares" :key="index">
-          <div class="position-relative overflow-hidden rounded shadow-sm">
-            <img :src="destino.imagen" class="w-100"
-              :style="{ width: destino.ancho + 'px', height: destino.altura + 'px', objectFit: 'cover' }"
-              :alt="destino.nombre" />
-            <div class="position-absolute bottom-0 start-0 w-100 text-white bg-dark bg-opacity-50 p-2">
-              <strong>{{ destino.nombre }}</strong>
-            </div>
-          </div>
+
+    <section class="container my-5">
+  <h2 class="mb-4">Destinos Populares</h2>
+  <div class="row g-3">
+    <div class="col-6 col-md-4 col-lg-3" v-for="destino in destinosPopulares" :key="destino.id">
+      <div class="destino-card position-relative rounded-4 overflow-hidden">
+        <img :src="destino.imagen" alt="Destino" class="img-fluid w-100 h-100 object-cover" />
+        <div class="destino-nombre text-white fw-bold">{{ destino.nombre }}</div>
+        <div class="destino-fav position-absolute top-0 end-0 m-2">
+          <i class="bi bi-heart rounded-circle border border-2 p-1 text-warning bg-white"></i>
         </div>
-      </div>   
-    </section> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="container py-5 text-center">
+  <h2 class="fw-bold mb-4">Contacta a nuestros Asesores ✌️👩‍💼</h2>
+  <div class="row g-4 justify-content-center">
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="card contacto-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-camera-video-fill fs-1 text-dark"></i>
+          <h5 class="card-title mt-3">Agendar</h5>
+          <p class="card-text">Videollamada</p>
+          <a href="https://wa.me/51940055540" class="btn btn-success btn-sm">Agendar</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="card contacto-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-telephone-fill fs-1 text-dark"></i>
+          <h5 class="card-title mt-3">Llámanos</h5>
+          <p class="card-text fw-bold">(51) 940 055 540</p>
+          <a href="tel:940055540" class="btn btn-success btn-sm">Llamar ahora</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="card contacto-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-whatsapp fs-1 text-dark"></i>
+          <h5 class="card-title mt-3">WhatsApp</h5>
+          <p class="card-text fw-bold">940 055 540</p>
+          <a href="https://wa.me/51940055540" target="_blank" class="btn btn-success btn-sm">Chatear</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="card contacto-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-shop fs-1 text-dark"></i>
+          <h5 class="card-title mt-3">Oficina</h5>
+          <p class="card-text">Calle Agustin Arbulú 115 - Lambayeque</p>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=-6.7707270069791%2C-79.859550744295" class="btn btn-success btn-sm">Abrir Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
     <!-- section favorite Tours -->
     <section class="full-screen mb-4">
@@ -369,9 +407,16 @@
                     target="_blank"
                     class="btn btn-success btn-sm d-flex align-items-center"
                   >
-                    <i class="bi bi-whatsapp me-1" /> VER MÁS
+                   VER MÁS
                   </a>
-                  <span class="fw-bold fs-5">S/ {{ tour.precio }}</span>
+                  <a
+                    href="https://wa.me/tu_numero"
+                    target="_blank"
+                    class="btn btn-success btn-sm d-flex align-items-center"
+                  >
+                    <i class="bi bi-whatsapp me-1" />
+                  </a>
+                  <span class="fw-bold fs-5">Desde S/ {{ tour.precio }}</span>
                 </div>
               </div>
             </div>
@@ -380,213 +425,171 @@
       </div>
 
       <div class="text-center mt-4">
-        <button class="btn btn-outline-success px-4">
+        <a href="/tours" class="btn btn-outline-success px-4" >
           Ver más tours
-        </button>
+        </a>
       </div>
     </section>
+    <section class="py-5 bg-light position-relative overflow-hidden">
+  <div class="container">
+    <div class="row align-items-center">
+      
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <img src="../../assets/images/munayki.jpg" alt="Experiencia Munayki" class="img-fluid rounded-4 shadow-lg" />
+      </div>
 
-    <!-- section international destinations -->
-    <section class="py-5 bg-light full-screen">
-      <h2 class="text-center mb-4 fw-bold">
-        Destinos Nacionales
-      </h2>
+      <div class="col-lg-7">
+        <h2 class="fw-bold text-dark mb-4">Descubre el Perú a tu manera con <span class="text-success">Munayki</span></h2>
+        <p class="text-muted mb-5">Creamos experiencias auténticas, seguras y transformadoras para que vivas el turismo como nunca antes.</p>
 
-      <div
-        id="carouselInternacional"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div class="carousel-inner w-50 mx-auto">
-          <div
-            v-for="(destino, index) in destinosNacionales"
-            :key="index"
-            :class="['carousel-item', { active: index === 0 }]"
-          >
-            <img
-              :src="destino.imagen"
-              class="d-block w-100"
-              :alt="destino.nombre"
-              style="height: 400px; object-fit: cover"
-            >
-            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-              <h5>{{ destino.nombre }}</h5>
-              <p>{{ destino.descripcion }}</p>
+        <div class="row g-4">
+          <div class="col-12 col-md-6">
+            <div class="d-flex align-items-start">
+              <div class="icon-circle bg-success text-white me-3"><i class="bi bi-stars"></i></div>
+              <div>
+                <h5 class="fw-bold">Viajes Personalizados</h5>
+                <p class="text-muted small mb-0">Diseñamos rutas a medida según tus gustos, tiempo y estilo de viaje.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="d-flex align-items-start">
+              <div class="icon-circle bg-success text-white me-3"><i class="bi bi-gem"></i></div>
+              <div>
+                <h5 class="fw-bold">Destinos Únicos</h5>
+                <p class="text-muted small mb-0">Accede a experiencias fuera de lo común, alejadas del turismo masivo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="d-flex align-items-start">
+              <div class="icon-circle bg-success text-white me-3"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <h5 class="fw-bold">Seguridad Garantizada</h5>
+                <p class="text-muted small mb-0">Protocolos actualizados, guías expertos y atención 24/7.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="d-flex align-items-start">
+              <div class="icon-circle bg-success text-white me-3"><i class="bi bi-globe-americas"></i></div>
+              <div>
+                <h5 class="fw-bold">Turismo Responsable</h5>
+                <p class="text-muted small mb-0">Apoyamos a comunidades locales y cuidamos nuestro entorno natural.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+   
+<section id="testimonios" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5 fw-bold text-dark">Lo que dicen nuestros viajeros</h2>
+    <div id="carouselTestimonios" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row">
+            <div class="col-md-4 mb-3" v-for="n in 3" :key="n">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-2">
+                    <img src="https://i.pravatar.cc/32?img=1" class="rounded-circle me-2"  style="width: 80px; height: 80px; object-fit: cover;" alt="avatar">
+                    <div>
+                      <h6 class="mb-0 fw-bold">Usuario {{ n }}</h6>
+                      <small class="text-muted">Abril 2025</small>
+                    </div>
+                    <img src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png" class="ms-auto" style="width: 40px; height: 40px; object-fit: cover;" alt="Google">
+                  </div>
+                  <div class="mb-2 text-warning">★★★★★ <span class="text-success">✔️</span></div>
+                  <p class="mb-0">Comentario número {{ n }} sobre lo increíble del servicio recibido con Munayki.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Controles -->
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselInternacional"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" />
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselInternacional"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" />
-        </button>
-      </div>
-    </section>
-
-    <!-- section testimonials -->
-    <section
-      id="testimonios"
-      class="py-5  full-screen"
-    >
-      <div class="container">
-        <h2 class="text-center mb-5 fw-bold">
-          Lo que dicen nuestros viajeros
-        </h2>
-        <div class="container my-5">
-          <div class="testimonials-wrapper">
-            <div class="testimonials-container d-flex flex-nowrap overflow-auto">
-              <!-- Tarjeta 1 -->
-              <div class="testimonial-card card me-3">
+        <!-- Clona esto para más slides -->
+        <div class="carousel-item">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <!-- Testimonio 4 -->
+              <div class="card h-100">
                 <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
-                    <div class="avatar bg-primary text-white rounded-circle me-2">
-                      M
-                    </div>
+                    <img src="https://i.pravatar.cc/32?img=4" class="rounded-circle me-2" style="width: 80px; height: 80px; object-fit: cover;"  alt="avatar">
                     <div>
-                      <h6 class="mb-0 fw-bold">
-                        Mase
-                      </h6>
-                      <small class="text-muted">19 Abril 2025</small>
+                      <h6 class="mb-0 fw-bold">María López</h6>
+                      <small class="text-muted">10 Abril 2025</small>
                     </div>
-                    <img
-                      src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png"
-                      alt="Google"
-                      class="ms-auto"
-                      width="20"
-                    >
+                    <img src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png" class="ms-auto" style="width: 40px; height: 40px; object-fit: cover;"  alt="Google">
                   </div>
-                  <div class="mb-2">
-                    <span class="text-warning">★★★★★</span>
-                    <span class="text-primary">✔️</span>
-                  </div>
-                  <p class="mb-0">
-                    Excelentes los tours hechos, el guía German lo máximo, super ameno y solícito total 👍
-                  </p>
+                  <div class="mb-2 text-warning">★★★★★ <span class="text-success">✔️</span></div>
+                  <p class="mb-0">Todo fue excelente, desde la organización hasta la atención en cada destino.</p>
                 </div>
               </div>
-
-              <!-- Tarjeta 2 -->
-              <div class="testimonial-card card me-3">
+            </div>
+            <div class="col-md-4 mb-3">
+              <!-- Testimonio 5 -->
+              <div class="card h-100">
                 <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
-                    <img
-                      src="https://i.pravatar.cc/32?img=1"
-                      class="rounded-circle me-2"
-                      width="32"
-                      height="32"
-                      alt="avatar"
-                    >
+                    <img src="https://i.pravatar.cc/32?img=5" class="rounded-circle me-2" style="width: 80px; height: 80px; object-fit: cover;" alt="avatar">
                     <div>
-                      <h6 class="mb-0 fw-bold text-capitalize">
-                        kevin daniel castillo marc...
-                      </h6>
-                      <small class="text-muted">14 Abril 2025</small>
+                      <h6 class="mb-0 fw-bold">Carlos Vega</h6>
+                      <small class="text-muted">8 Abril 2025</small>
                     </div>
-                    <img
-                      src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png"
-                      class="ms-auto"
-                      width="20"
-                      alt="Google"
-                    >
+                    <img src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png" class="ms-auto" style="width: 40px; height: 40px; object-fit: cover;" alt="Google">
                   </div>
-                  <div class="mb-2">
-                    <span class="text-warning">★★★★★</span>
-                    <span class="text-primary">✔️</span>
-                  </div>
-                  <p class="mb-0">
-                    Excelente servicio, los guías super preparados, el hotel muy acogedor. Una agencia
-                    super recomendable y confiable.
-                  </p>
+                  <div class="mb-2 text-warning">★★★★★ <span class="text-success">✔️</span></div>
+                  <p class="mb-0">Una experiencia única y segura. Gracias Munayki por hacer el viaje especial.</p>
                 </div>
               </div>
-
-              <div class="testimonial-card card me-3">
+            </div>
+            <div class="col-md-4 mb-3">
+              <!-- Testimonio 6 -->
+              <div class="card h-100">
                 <div class="card-body">
                   <div class="d-flex align-items-center mb-2">
-                    <img
-                      src="https://i.pravatar.cc/32?img=1"
-                      class="rounded-circle me-2"
-                      width="32"
-                      height="32"
-                      alt="avatar"
-                    >
+                    <img src="https://i.pravatar.cc/32?img=6" class="rounded-circle me-2" style="width: 80px; height: 80px; object-fit: cover;" alt="avatar">
                     <div>
-                      <h6 class="mb-0 fw-bold text-capitalize">
-                        kevin daniel castillo marc...
-                      </h6>
-                      <small class="text-muted">14 Abril 2025</small>
+                      <h6 class="mb-0 fw-bold">Sandra G.</h6>
+                      <small class="text-muted">6 Abril 2025</small>
                     </div>
-                    <img
-                      src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png"
-                      class="ms-auto"
-                      width="20"
-                      alt="Google"
-                    >
+                    <img src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png" class="ms-auto" style="width: 40px; height: 40px; object-fit: cover;" alt="Google">
                   </div>
-                  <div class="mb-2">
-                    <span class="text-warning">★★★★★</span>
-                    <span class="text-primary">✔️</span>
-                  </div>
-                  <p class="mb-0">
-                    Excelente servicio, los guías super preparados, el hotel muy acogedor. Una agencia
-                    super recomendable y confiable.
-                  </p>
+                  <div class="mb-2 text-warning">★★★★★ <span class="text-success">✔️</span></div>
+                  <p class="mb-0">Muy profesionales y atentos. Repetiría el tour sin duda alguna.</p>
                 </div>
               </div>
-
-              <div class="testimonial-card card me-3">
-                <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      src="https://i.pravatar.cc/32?img=1"
-                      class="rounded-circle me-2"
-                      width="32"
-                      height="32"
-                      alt="avatar"
-                    >
-                    <div>
-                      <h6 class="mb-0 fw-bold text-capitalize">
-                        kevin daniel castillo marc...
-                      </h6>
-                      <small class="text-muted">14 Abril 2025</small>
-                    </div>
-                    <img
-                      src="https://images.icon-icons.com/2429/PNG/512/google_logo_icon_147282.png"
-                      class="ms-auto"
-                      width="20"
-                      alt="Google"
-                    >
-                  </div>
-                  <div class="mb-2">
-                    <span class="text-warning">★★★★★</span>
-                    <span class="text-primary">✔️</span>
-                  </div>
-                  <p class="mb-0">
-                    Excelente servicio, los guías super preparados, el hotel muy acogedor. Una agencia
-                    super recomendable y confiable.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Puedes seguir agregando más tarjetas igual -->
             </div>
           </div>
         </div>
+
       </div>
-    </section>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselTestimonios" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselTestimonios" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
   </div>
 </template>
 
@@ -618,49 +621,49 @@ const ofertasEspeciales = [
     link: '#'
   }
 ]
-// const destinosPopulares = [
-//   {
-//     nombre: 'Machu Picchu',
-//     imagen: '/images/destinosPopulares/machu.png',
-//     ancho: 300,
-//     altura: 250
-//   },
-//   {
-//     nombre: 'Lago Titicaca',
-//     imagen: '/images/destinosPopulares/titicaca.png',
-//     altura: 300
-//   },
-//   {
-//     nombre: 'Arequipa',
-//     imagen: '/images/destinosPopulares/arequipa.png',
-//     altura: 220
-//   },
-//   {
-//     nombre: 'Paracas',
-//     imagen: '/images/destinosPopulares/paracas.png',
-//     altura: 280
-//   },
-//   {
-//     nombre: 'Huaraz',
-//     imagen: '/images/destinosPopulares/huaraz.png',
-//     altura: 260
-//   },
-//   {
-//     nombre: 'Iquitos',
-//     imagen: '/images/destinosPopulares/iquitos.png',
-//     altura: 240
-//   }
-// ]
+const destinosPopulares = [
+  {
+    nombre: 'Machu Picchu',
+    imagen: '/images/destinosPopulares/machu.png',
+    ancho: 300,
+    altura: 250
+  },
+  {
+    nombre: 'Lago Titicaca',
+    imagen: '/images/destinosPopulares/titicaca.png',
+    altura: 300
+  },
+  {
+    nombre: 'Arequipa',
+    imagen: '/images/destinosPopulares/arequipa.png',
+    altura: 220
+  },
+  {
+    nombre: 'Paracas',
+    imagen: '/images/destinosPopulares/paracas.png',
+    altura: 280
+  },
+  {
+    nombre: 'Huaraz',
+    imagen: '/images/destinosPopulares/huaraz.png',
+    altura: 260
+  },
+  {
+    nombre: 'Iquitos',
+    imagen: '/images/destinosPopulares/iquitos.png',
+    altura: 240
+  }
+]
 
 const toursFavoritos = [
-  { nombre: 'Cusco Mágico', precio: 'Desde S/999', imagen: '/images/toursFavoritos/cusco.png' },
-  { nombre: 'Arequipa Blanca', precio: 'Desde S/850', imagen: '/images/toursFavoritos/arequipa.png' },
-  { nombre: 'Selva Viva', precio: 'Desde S/780', imagen: '/images/toursFavoritos/selva.png' },
-  { nombre: 'Colca Adventure', precio: 'Desde S/720', imagen: '/images/toursFavoritos/colca.png' },
-  { nombre: 'Lima City Tour', precio: 'Desde S/500', imagen: '/images/toursFavoritos/lima.png' },
-  { nombre: 'Puno Encantado', precio: 'Desde S/890', imagen: '/images/toursFavoritos/puno.png' },
-  { nombre: 'Huaraz Trekking', precio: 'Desde S/950', imagen: '/images/toursFavoritos/huaraz.png' },
-  { nombre: 'Paracas & Ica', precio: 'Desde S/690', imagen: '/images/toursFavoritos/paracas.png' }
+  { nombre: 'Cusco Mágico', precio: '999', imagen: '/images/toursFavoritos/cusco.png' },
+  { nombre: 'Arequipa Blanca', precio: '850', imagen: '/images/toursFavoritos/arequipa.png' },
+  { nombre: 'Selva Viva', precio: '780', imagen: '/images/toursFavoritos/selva.png' },
+  { nombre: 'Colca Adventure', precio: '720', imagen: '/images/toursFavoritos/colca.png' },
+  { nombre: 'Lima City Tour', precio: '500', imagen: '/images/toursFavoritos/lima.png' },
+  { nombre: 'Puno Encantado', precio: '890', imagen: '/images/toursFavoritos/puno.png' },
+  { nombre: 'Huaraz Trekking', precio: '950', imagen: '/images/toursFavoritos/huaraz.png' },
+  { nombre: 'Paracas & Ica', precio: '690', imagen: '/images/toursFavoritos/paracas.png' }
 ]
 
 const destinosNacionales = [
@@ -743,4 +746,57 @@ const destinosNacionales = [
 .oferta-card .card-text {
   margin: 0;
 }
+
+.destino-card {
+  height: 180px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+.destino-card:hover {
+  transform: scale(1.03);
+}
+.destino-nombre {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 3px #000;
+}
+.object-cover {
+  object-fit: cover;
+}
+.img-fluid {
+  transition: transform 0.3s ease;
+}
+.img-fluid:hover {
+  transform: scale(1.03);
+}
+.contacto-card {
+  background: linear-gradient(135deg, #44d62c 0%, #1E7F61 100%) !important;
+  color: black;
+  border: none;
+  border-radius: 1rem;
+}
+.contacto-card .card-body {
+  background: linear-gradient(135deg, #44d62c 0%, #09c18c 100%) !important;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+}
+.contacto-card .card-body:hover {
+  background: linear-gradient(135deg, #09c18c 0%, #09c18c 100%) !important;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transform: scale(1.03);
+}
+.icon-circle {
+  width: 90px;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+
 </style>
