@@ -22,9 +22,9 @@
                 </div>
                 <!-- contact us -->
                 <div>
-                    <button class="btn btn-success">
+                    <a href="https://wa.me/51940055540" target="_blank" class="btn btn-success">
                         Cotizar Ahora
-                    </button>
+                    </a>
                 </div>
             </div>
             <!-- Navbar -->
@@ -37,32 +37,37 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav d-flex justify-content-between w-100 ps-4 pe-4">
                             <li class="nav-item">
-                                <router-link class="nav-link d-flex flex-column align-items-center">
-                                    <i class="bi bi-calendar3"></i>
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'full-days' } }" class="nav-link d-flex flex-column align-items-center">
+                                    <img src="/images/categorias navbar/full-days.svg"
+                                        style="width: 50px; height: 50px;">
                                     Full Days
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link d-flex flex-column align-items-center">
-                                    <i class="bi bi-calendar2-day"></i>
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'half-days' } }" class="nav-link d-flex flex-column align-items-center">
+                                    <img src="/images/categorias navbar/half-days.svg"
+                                        style="width: 50px; height: 50px;">
                                     Half Days
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link d-flex flex-column align-items-center">
-                                    <i class="bi bi-calendar-event"></i>
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'holydays' } }" class="nav-link d-flex flex-column align-items-center">
+                                    <img src="/images/categorias navbar/festivos.svg"
+                                        style="width: 50px; height: 50px;">
                                     Fechas Festivas
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link d-flex flex-column align-items-center">
-                                    <i class="bi bi-flag"></i>
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'nacionals' } }" class="nav-link d-flex flex-column align-items-center">
+                                    <img src="/images/categorias navbar/nacional.svg"
+                                        style="width: 50px; height: 50px;">
                                     Nacionales
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link class="nav-link d-flex flex-column align-items-center">
-                                    <i class="bi bi-globe"></i>
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'internacionals' } }" class="nav-link d-flex flex-column align-items-center">
+                                    <img src="/images/categorias navbar/internacional.svg"
+                                        style="width: 50px; height: 50px;">
                                     Internacionales
                                 </router-link>
                             </li>

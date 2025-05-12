@@ -4,12 +4,7 @@
       <div class="row">
         <!-- Logo y descripción -->
         <div class="col-md-3 mb-4">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            style="height: 150px;"
-            class="mb-3"
-          >
+          <img src="/logo.png" alt="Logo" style="height: 150px;" class="mb-3">
           <p>Tu mejor compañero de aventuras y viajes inolvidables. ¡Descubre el mundo con nosotros!</p>
         </div>
 
@@ -18,30 +13,18 @@
           <h5 class="fw-bold">
             Categorías
           </h5>
-          <ul class="list-unstyled">
+          <ul class="list-unstyled d-flex flex-column gap-2">
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Full days</a>
+              <a href="#" class="text-white text-decoration-none">Full days</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Half days</a>
+              <a href="#" class="text-white text-decoration-none">Half days</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Nacionales</a>
+              <a href="#" class="text-white text-decoration-none">Nacionales</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Viajes escolares</a>
+              <a href="#" class="text-white text-decoration-none">Viajes escolares</a>
             </li>
           </ul>
         </div>
@@ -50,30 +33,18 @@
           <h5 class="fw-bold">
             Acerca de
           </h5>
-          <ul class="list-unstyled">
+          <ul class="list-unstyled d-flex flex-column gap-2">
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Nosotros</a>
+              <a href="#" class="text-white text-decoration-none">Nosotros</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Preguntas frecuentes</a>
+              <a href="#" class="text-white text-decoration-none">Preguntas frecuentes</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Términos y condiciones</a>
+              <a href="#" class="text-white text-decoration-none">Términos y condiciones</a>
             </li>
             <li>
-              <a
-                href="#"
-                class="text-white text-decoration-none"
-              >Contáctanos</a>
+              <a href="#" class="text-white text-decoration-none">Contáctanos</a>
             </li>
           </ul>
         </div>
@@ -83,15 +54,12 @@
           <h5 class="fw-bold">
             Contacto
           </h5>
-          <div class="d-flex flex-column gap-3">
-            <a
-              href="#"
-              class="text-white text-decoration-none"
-            ><i class="bi bi-telephone-fill" /> +51 940 055 540</a>
-            <a
-              href="#"
-              class="text-white text-decoration-none"
-            ><i class="bi bi-envelope-open-fill" /> munaykiturismo@gmail.com</a>
+          <div class="list-unstyled d-flex flex-column gap-3">
+            <a href="https://wa.me/51940055540" class="text-white text-decoration-none"><i
+                class="bi bi-telephone-fill" /> +51 940 055 540</a>
+            <a href="mailto:munaykiturismo@gmail.com?subject=Consulta%20Turística&body=Hola%2C%20me%20gustaría%20más%20información..." target="_blank" class="text-white text-decoration-none">
+              <i class="bi bi-envelope-open-fill"></i> munaykiturismo@gmail.com
+            </a>
           </div>
         </div>
       </div>
@@ -101,4 +69,3 @@
     </div>
   </footer>
 </template>
-

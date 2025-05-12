@@ -6,6 +6,13 @@ import 'bootstrap'
 import './assets/main.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'vue-multiselect/dist/vue-multiselect.css'   
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 
-createApp(App).use(router).mount('#app')
+const app = createApp(App)
+app.use(router)
+app.component('QuillEditor', QuillEditor)
+app.component('multiselect', () => import('vue-multiselect'))
+
+app.mount('#app')

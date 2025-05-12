@@ -9,21 +9,22 @@ import Categorias from '@/views/admin/Categorias.vue'
 import Destinos from '@/views/admin/Destinos.vue'
 import Actividades from '@/views/admin/Actividades.vue'
 import Productos from '@/views/admin/Productos.vue'
+import Cupones from '@/views/admin/Cupones.vue'
 import DetalleProducto from '@/views/public/DetalleProducto.vue'
 import Tours from '@/views/public/Tours.vue'
 
 
 const routes = [
- 
+
   //Pagina Web
   {
     path: '/',
     component: PublicLayout,
     children: [
       { path: '', name: 'home', component: HomeView },
-      { path: 'tours/:idtour', name: 'DetalleProducto', component: DetalleProducto },
-      { path: 'tours', name: 'Producto', component: Tours },
-     
+      { path: 'tours/:category/:slug', name: 'DetalleProducto', component: DetalleProducto },
+      { path: 'tours/:category', name: 'CategoriasNav', component: Tours },
+
     ],
     meta: { requiresAuth: false },
   },
@@ -33,11 +34,13 @@ const routes = [
     component: AdminLayout,
     children: [
       { path: 'dashboard', name: 'adminDashboard', component: Dashboard },
+      { path: 'tours', name: 'Tours', component: Productos },
       { path: 'categorias', name: 'Categorias', component: Categorias },
       { path: 'destinos', name: 'Destinos', component: Destinos },
       { path: 'actividades', name: 'Actividades', component: Actividades },
-      { path: 'tours', name: 'Tours', component: Productos },
-     
+      { path: 'productos', name: 'Productos', component: Productos }, 
+      {path: 'cupones', name: 'Cupones', component: Cupones},
+
     ],
     meta: { requiresAuth: true, role: 'admin' },
   },
