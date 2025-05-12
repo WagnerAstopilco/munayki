@@ -15,7 +15,6 @@
     "bootstrap-icons": "^1.12.1",
     "core-js": "^3.8.3",
     "file-saver": "^2.0.5",
-    "quill": "^2.0.3",
     "sweetalert2": "^11.21.0",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",

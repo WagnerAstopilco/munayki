@@ -52,7 +52,7 @@
       <h2 class="mb-4 text-center fw-bold">Ofertas Especiales</h2>
       <div class="row g-4">
         <div class="col-12 col-md-6 col-lg-3" v-for="(card, index) in textos.specialOffers" :key="index">
-          <a href="#"><img :src="card.image" :alt="'Oferta' + (index + 1)" class="img-fluid rounded shadow-sm" /></a>
+          <a href="#"><img :src="card.image" :alt="'Oferta' + (index + 1)" class="img-fluid rounded-4 shadow-sm" /></a>
         </div>
       </div>
     </section>
@@ -62,13 +62,13 @@
       <h2 class="mb-4 text-center">Destinos Populares</h2>
       <div class="row g-3">
         <div class="col-6 col-md-4 col-lg-3" v-for="destino in destinosPopulares" :key="destino.id">
-          <div class="destino-card position-relative rounded-4 overflow-hidden">
+          <a href="#"><div class="destino-card position-relative rounded-4 overflow-hidden">
             <img :src="destino.imagen" alt="Destino" class="img-fluid w-100 h-100 object-cover" />
             <div class="destino-nombre text-white fw-bold">{{ destino.nombre }}</div>
             <div class="destino-fav position-absolute top-0 end-0 m-2">
               <i class="bi bi-heart rounded-circle border border-2 p-1 text-warning bg-white"></i>
             </div>
-          </div>
+          </div></a>
         </div>
       </div>
     </section>  
@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <a href="/tours" class="btn btn-outline-success px-4 py-3 rounded-4">  
+        <a href="/tours/all" class="btn btn-outline-success px-4 py-3 rounded-4">  
           Ver más tours
         </a>
       </div>
@@ -471,6 +471,7 @@ const destinosNacionales = [
 
 .destino-card {
   height: 180px;
+  
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }

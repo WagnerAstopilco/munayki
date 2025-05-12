@@ -1,5 +1,5 @@
 <template>
-    <a href="" class="card">
+    <div class="card">
         <div class="position-relative">
                 <img :src="tour.imagen" class="card-img-top img-cover" :alt="tour.nombre">
                 <div class="overlay-gradient d-flex flex-column justify-content-end p-3">
@@ -15,7 +15,7 @@
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-success btn-sm d-flex align-items-center ">
+                                <a href="/tours/full-day/producto" class="btn btn-success btn-sm d-flex align-items-center ">
                                     VER MÁS
                                 </a>
                                 <a href="https://wa.me/51940055540" target="_blank"
@@ -28,7 +28,7 @@
                     </div>
                 </div>
         </div>
-    </a>
+    </div>
 
 
 </template>

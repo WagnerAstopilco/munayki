@@ -1,14 +1,14 @@
 <template>
     <div class="">
         <div class="row align-items-center justify-content-center bg-success text-white" style="height: 200px;">
-          
+
         </div>
 
         <div class="container mt-4">
             <div class="row g-4">
                 <!-- Carrusel -->
                 <div class="col-md-7">
-                    <div id="carouselTourImages" class="carousel slide" data-bs-ride="carousel">
+                    <div id="carouselTourImages" class="carousel slide" data-bs-ride="carousel" ref="carouselRef">
                         <div class="carousel-inner rounded-4 overflow-hidden">
                             <div v-for="(img, i) in images" :key="i" class="carousel-item" :class="{ active: i === 0 }">
                                 <img :src="img" class="d-block w-100" alt="Imagen del tour" />
@@ -25,7 +25,7 @@
                     </div>
                     <div class="d-flex justify-content-center mt-3">
                         <img v-for="(img, i) in images" :key="i" :src="img" @click="goToSlide(i)"
-                            class="me-2 rounded-2 border border-light"
+                            :class="['me-2 rounded-2 border border-light preview',{ 'border-primary border-2 scale-up': i === activeIndex } ]"
                             style="width: 70px; height: 50px; object-fit: cover; cursor: pointer" />
                     </div>
                 </div>
@@ -38,7 +38,7 @@
 
                     <p class="fw-semibold mb-1">Precio por persona:</p>
                     <p class="fs-3 fw-bold text-danger">S/ 430.00</p>
-<hr>
+                    <hr>
                     <div class="mb-3">
                         <p class="fw-bold mb-1">Incluye</p>
                         <div class="d-flex gap-3">
@@ -56,7 +56,7 @@
 
                     <p class="fw-bold mb-0">Categoría</p>
                     <p class="text-muted small">Destinos Nacionales</p>
-<hr>
+                    <hr>
                     <div class="d-flex gap-2 mt-3">
                         <button class="btn btn-warning fw-bold">Reservar Ahora</button>
                         <a href="#" class="btn btn-success fw-bold">Por WhatsApp</a>
@@ -82,16 +82,22 @@
                             <li><strong>Día 03:</strong> Vilcashuamán - Intihuatana</li>
                         </ul>
                     </div>
-                    <div v-else-if="currentTab === 'incluye'">
-                        <p>Transporte, hotel, guía, desayuno, entradas.</p>
+                    <div v-else-if="currentTab === 'incluye'"  id="incluye">
+                        <div class="container">
+                            <QuillEditor theme="snow" toolbar="full" />
+                            <p>Transporte, hotel, guía, desayuno, entradas.</p>
+
+                        </div>
                     </div>
                     <div v-else-if="currentTab === 'metodos'">
                         <p>Transferencias, Yape, Plin, tarjeta crédito/débito.</p>
                     </div>
-                    <div v-else-if="currentTab === 'requisitos'">
+                    <div v-else-if="currentTab === 'requisitos'" id="requisitos">
+                        <QuillEditor theme="snow" />
                         <p>Documento de identidad, buen estado físico, ropa ligera.</p>
                     </div>
-                    <div v-else-if="currentTab === 'descripcion'">
+                    <div v-else-if="currentTab === 'descripcion'" id="descripcion">
+                        <QuillEditor theme="snow" />
                         <p>Descubre Ayacucho en un viaje de 3 días lleno de historia, naturaleza y cultura viva.</p>
                     </div>
                 </div>
@@ -102,9 +108,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { Carousel } from 'bootstrap'
+import {QuillEditor} from '@vueup/vue-quill'
+
+const carouselRef = ref(null)
+const activeIndex = ref(0)
 
 const currentTab = ref('itinerario')
+
+
+const tabs = [
+  { name: 'itinerario', label: 'Itinerario' },
+  { name: 'incluye', label: 'Incluye' },
+  { name: 'metodos', label: 'Métodos de pago' },
+  { name: 'requisitos', label: 'Requisitos' },
+  { name: 'descripcion', label: 'Descripción' }
+]
+
+
 const images = [
     'https://i.ibb.co/1Zc7z5t/aya1.jpg',
     'https://i.ibb.co/dPbrnJ9/aya2.jpg',
@@ -112,19 +134,22 @@ const images = [
     'https://i.ibb.co/0pFkbNb/aya4.jpg',
     'https://i.ibb.co/MBXHH7J/aya5.jpg'
 ]
-const tabs = [
-    { name: 'itinerario', label: 'Itinerario' },
-    { name: 'incluye', label: 'Incluye' },
-    { name: 'metodos', label: 'Métodos de Pago' },
-    { name: 'requisitos', label: 'Requisitos para tu reserva' },
-    { name: 'descripcion', label: 'Descripción' }
-]
+
+
 
 const goToSlide = (index) => {
-    const carousel = document.querySelector('#carouselTourImages')
-    const bsCarousel = bootstrap.Carousel.getInstance(carousel) || new bootstrap.Carousel(carousel)
-    bsCarousel.to(index)
+  const bsCarousel = Carousel.getInstance(carouselRef.value) || new Carousel(carouselRef.value)
+  bsCarousel.to(index)
+  activeIndex.value = index
 }
+
+onMounted(() => {
+  const bsCarousel = new Carousel(carouselRef.value)
+
+  carouselRef.value.addEventListener('slid.bs.carousel', (e) => {
+    activeIndex.value = e.to // índice de la nueva imagen activa
+  })
+})
 </script>
 
 <style scoped>
@@ -137,5 +162,18 @@ const goToSlide = (index) => {
     background-color: #ffc107;
     color: #000;
     font-weight: bold;
+}
+
+.preview {
+  transition: transform 0.3s ease;
+}
+
+.preview:hover {
+  transform: scale(1.05);
+}
+.scale-up {
+  transform: scale(1.5);
+  transition: transform 0.3s ease;
+  z-index: 1;
 }
 </style>
