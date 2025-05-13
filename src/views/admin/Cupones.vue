@@ -25,7 +25,7 @@
                     <tr @click="abrirFormulario(item)" class="cursor-pointer">
                         <td>{{ item.name }}</td>
                         <td>{{ item.code }}</td>
-                        <td>{{ item.discount_percentage }}</td>
+                        <td>{{ item.discount_percentage }}%</td>
                         <td>{{ item.max_uses }}</td>
                         <td>{{ item.uses_count }}</td>
                         <td>{{ item.valid_from }}</td>
@@ -86,6 +86,11 @@
                     </div>
                 </div>
 
+                <div class="mb-2">
+                    <label class="form-label">Productos</label>
+                    <Multiselect v-model="form.product_ids" :options="productos" :track-by="'id'" :label="'name'"
+                        :multiple="true" placeholder="Selecciona los productos" :allow-empty="true" />
+                </div>
 
                 <div class="d-flex justify-content-between mt-3">
                     <button type="submit" class="btn btn-success" :disabled="guardando">
@@ -103,6 +108,7 @@
 // eslint-disable-next-line vue/multi-word-component-names
 import { ref, onMounted } from 'vue'
 import CuponService from '../../services/CuponService'
+import ProductoService from '../../services/ProductoService'
 import { parseError } from '../../utils/parseError'
 import { showSuccess, showError, showConfirm } from '../../utils/alert'
 import Multiselect from 'vue-multiselect'
@@ -110,6 +116,7 @@ import CouponTable from '../../components/Table.vue'
 import CuponModal from '../../components/Modal.vue'
 
 const cupones = ref([])
+const productos = ref([])
 const loading = ref(false)
 const mostrarModal = ref(false)
 const error = ref('')
@@ -126,6 +133,7 @@ const form = ref({
     uses_count: 0,
     valid_from: '',
     valid_to: '',
+    product_ids: [],
 })
 
 const obtenerCupones = async () => {
@@ -133,6 +141,19 @@ const obtenerCupones = async () => {
     try {
         const res = await CuponService.getCoupons()
         cupones.value = Array.isArray(res.data.data) ? res.data.data : []
+
+    } catch (err) {
+        console.error(err)
+    } finally {
+        loading.value = false
+    }
+}
+
+const obtenerProductos = async () => {
+    loading.value = true
+    try {
+        const res = await ProductoService.getProductos()
+        productos.value = Array.isArray(res.data.data) ? res.data.data : []
 
     } catch (err) {
         console.error(err)
@@ -157,6 +178,7 @@ const abrirFormulario = (cupon = null) => {
             uses_count: 0,
             valid_from: '',
             valid_to: '',
+            product_ids: [],
         }
     }
 
@@ -168,7 +190,20 @@ const abrirFormulario = (cupon = null) => {
 
 const cerrarModal = () => {
     mostrarModal.value = false
-    form.value = { id: null, name: '', description: '', parent_id: null }
+    error.value = ''
+    errores.value = {}
+    form.value = {
+        id: null,
+        name: '',
+        code: '',
+        description: '',
+        discount_percentage: '',
+        max_uses: '',
+        uses_count: 0,
+        valid_from: '',
+        valid_to: '',
+        product_ids: [],
+    }
 }
 
 const guardarCupon = async () => {
@@ -179,14 +214,15 @@ const guardarCupon = async () => {
     if (Object.keys(errores.value).length) return
 
     const payload = {
-        name:form.value.name,
-        code:form.value.code,
-        description:form.value.description,
-        discount_percentage:form.value.discount_percentage,
-        max_uses:form.value.max_uses,
-        uses_count:form.value.uses_count,
-        valid_from:form.value.valid_from,
-        valid_to:form.value.valid_to,
+        name: form.value.name,
+        code: form.value.code,
+        description: form.value.description,
+        discount_percentage: form.value.discount_percentage,
+        max_uses: form.value.max_uses,
+        uses_count: form.value.uses_count||0,
+        valid_from: form.value.valid_from,
+        valid_to: form.value.valid_to,
+        product_ids: form.value.product_ids || [],
     }
 
     guardando.value = true
@@ -221,7 +257,10 @@ const eliminarCupon = async (id) => {
     }
 }
 
-onMounted(obtenerCupones)
+onMounted(()=>{
+    obtenerCupones()
+    obtenerProductos()
+})
 </script>
 
 <style scoped></style>
