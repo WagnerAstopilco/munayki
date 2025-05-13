@@ -15,7 +15,4 @@ export default {
     deleteCategory(id){
         return apiClient.delete(`/categories/${id}`);
     },
-    postCoursesToCategory(categoryId, coursesIds) {
-        return apiClient.post(`/categories/${categoryId}/courses`, coursesIds);
-    },
 }

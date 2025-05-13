@@ -108,23 +108,23 @@ const obtenerCategorias = async () => {
 }
 
 const abrirFormulario = (categoria = null) => {
-  if (categoria) {
-    form.value = {
-      ...categoria,
-      parent_id: categorias.value.find(cat => cat.id === categoria.parent_id) || null
+    if (categoria) {
+        form.value = {
+            ...categoria,
+            parent_id: categorias.value.find(cat => cat.id === categoria.parent_id) || null
+        }
+    } else {
+        form.value = {
+            id: null,
+            name: '',
+            description: '',
+            parent_id: null
+        }
     }
-  } else {
-    form.value = {
-      id: null,
-      name: '',
-      description: '',
-      parent_id: null
-    }
-  }
 
-  errores.value = {}
-  error.value = ''
-  mostrarModal.value = true
+    errores.value = {}
+    error.value = ''
+    mostrarModal.value = true
 }
 
 
@@ -142,12 +142,13 @@ const guardarCategoria = async () => {
 
     const payload = {
         name: form.value.name,
+        slug: form.value.name.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-'),
         description: form.value.description,
         parent_id: form.value.parent_id?.id || null,
     }
 
     guardando.value = true
-    
+
     try {
         if (form.value.id) {
             await CategoryService.patchCategory(form.value.id, payload)
@@ -181,6 +182,4 @@ const eliminarCategoria = async (id) => {
 onMounted(obtenerCategorias)
 </script>
 
-<style scoped>
-/* Tus estilos si los necesitas */
-</style>
+<style scoped></style>

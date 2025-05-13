@@ -9,7 +9,10 @@ import Categorias from '@/views/admin/Categorias.vue'
 import Destinos from '@/views/admin/Destinos.vue'
 import Actividades from '@/views/admin/Actividades.vue'
 import Productos from '@/views/admin/Productos.vue'
+import Usuarios from '@/views/admin/Usuarios.vue'
+import Promociones from '@/views/admin/Promociones.vue'
 import Cupones from '@/views/admin/Cupones.vue'
+import Banners from '@/views/admin/Banners.vue'
 import DetalleProducto from '@/views/public/DetalleProducto.vue'
 import Tours from '@/views/public/Tours.vue'
 
@@ -40,6 +43,9 @@ const routes = [
       { path: 'actividades', name: 'Actividades', component: Actividades },
       { path: 'productos', name: 'Productos', component: Productos }, 
       {path: 'cupones', name: 'Cupones', component: Cupones},
+      {path: 'promociones', name:'Promociones', component: Promociones},
+      {path: 'usuarios', name:'Usuarios', component: Usuarios},
+      {path: 'banners', name:'Banners', component: Banners},
 
     ],
     meta: { requiresAuth: true, role: 'admin' },
