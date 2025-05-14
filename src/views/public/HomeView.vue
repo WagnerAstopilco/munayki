@@ -13,7 +13,7 @@
           <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
         </div>
         <div class="carousel-inner">
-          <div class="carousel-item" :class="{ active: index === 0 }" v-for="(slide, index) in textos.mainCarrusell"
+          <div class="carousel-item" :class="{ active: index === 0 }" v-for="(slide, index) in banner.mainCarrusell"
             :key="index">
             <img :src="slide.image" class="d-block w-100" alt="...">
             <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
@@ -51,7 +51,7 @@
     <section class="container py-5">
       <h2 class="mb-4 text-center fw-bold">Ofertas Especiales</h2>
       <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-3" v-for="(card, index) in textos.specialOffers" :key="index">
+        <div class="col-12 col-md-6 col-lg-3" v-for="(card, index) in banner.specialOffers" :key="index">
           <a href="#"><img :src="card.image" :alt="'Oferta' + (index + 1)" class="img-fluid rounded-4 shadow-sm" /></a>
         </div>
       </div>
@@ -328,47 +328,29 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import BannerService from '../../services/BannerService';
 import TourCard from '@/components/CardProduct.vue'
 
-const textos = ref({})
+// const textos = ref({})
+const banner=ref([])
 
-const getTextos = async () => {
-  const response = await fetch('/textos/vista_principal_usuario.json')
-  const data = await response.json()
-  textos.value = data
-  console.log(textos);
+const loadBanner=async()=>{
+  const response = await BannerService.getBanner();
+    banner.value = response.data;
 }
 
+// const getTextos = async () => {
+//   const response = await fetch('/textos/vista_principal_usuario.json')
+//   const data = await response.json()
+//   textos.value = data
+//   console.log(textos);
+// }
+
 onMounted(() => {
-  getTextos();
+  loadBanner();
 })
 
-const ofertasEspeciales = [
-  {
-    titulo: 'Piura - Tumbes - Guayaquil',
-    descripcion: '5 días y 4 noches',
-    imagen: '/images/ofertasEspeciales/piura-tumbes-guayaquil.png',
-    link: '#'
-  },
-  {
-    titulo: 'Huaraz - Trujillo',
-    descripcion: '6 días y 5 noches',
-    imagen: '/images/ofertasEspeciales/huaraz-trujillo.png',
-    link: '#'
-  },
-  {
-    titulo: 'Ica - Paracas - Nazca',
-    descripcion: '4 días y 3 noches',
-    imagen: '/images/ofertasEspeciales/ica-paracas-nazca.png',
-    link: '#'
-  },
-  {
-    titulo: 'Ica - Paracas - Nazca',
-    descripcion: '4 días y 3 noches',
-    imagen: '/images/ofertasEspeciales/ica-paracas-nazca.png',
-    link: '#'
-  }
-]
+
 const destinosPopulares = [
   {
     nombre: 'Machu Picchu',
@@ -414,23 +396,7 @@ const toursFavoritos = [
   { nombre: 'Paracas & Ica', precio: '690', imagen: '/images/toursFavoritos/paracas.png' }
 ]
 
-const destinosNacionales = [
-  {
-    nombre: 'Huaraz, Perú',
-    descripcion: 'Montañas y aventura',
-    imagen: '/images/destinosNacionales/huaraz.png'
-  },
-  {
-    nombre: 'Cajamarca, Perú',
-    descripcion: 'Cultura y naturaleza',
-    imagen: '/images/destinosNacionales/cajamarca.png'
-  },
-  {
-    nombre: 'Piura, Perú',
-    descripcion: 'Playas y diversión',
-    imagen: '/images/destinosNacionales/piura.png'
-  }
-]
+
 
 
 </script>
