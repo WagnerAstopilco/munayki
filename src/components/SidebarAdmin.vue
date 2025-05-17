@@ -28,6 +28,9 @@
     <router-link to="/admin/cupones" class="nav-link-custom" active-class="active">
       <i class="bi bi-ticket-perforated me-2"/>Cupones
     </router-link>
+    <router-link to="/admin/reservas" class="nav-link-custom" active-class="active">
+      <i class="bi bi-calendar-check"></i> Reservas
+    </router-link>
     <router-link to="/admin/usuarios" class="nav-link-custom" active-class="active">
       <i class="bi bi-people me-2" />Usuarios
     </router-link>

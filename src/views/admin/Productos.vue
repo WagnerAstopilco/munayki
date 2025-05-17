@@ -17,18 +17,21 @@
           <th>Personas</th>
           <th>Precio PEN</th>
           <th>USD</th>
+          <th>Visible</th>
           <th>Acciones</th>
         </template>
         <template #row="{ item }">
           <tr>
             <td>{{ item.name }}</td>
-            <td>--</td>
-            <td>--</td>
+            <td>{{destinos.find(d => d.id === item.destino_id)?.place + ', ' + destinos.find(d => d.id ===
+              item.destino_id)?.country || 'sin destino'}}</td>
+            <td>{{categorias.find(c => c.id === item.category_id)?.name || '--'}}</td>
             <td>{{ item.number_of_days }}</td>
             <td>{{ item.number_of_nights }}</td>
             <td>{{ item.number_of_people }}</td>
             <td>S/ {{ item.price_PEN }}</td>
             <td>$ {{ item.price_USD }}</td>
+            <td>{{ item.visible_in_main_web === true ? 'Visible' : '—' }}</td>
             <td>
               <button class="btn btn-sm btn-outline-warning me-2" @click="abrirFormulario(item)">
                 <i class="bi bi-pencil" />
@@ -50,12 +53,22 @@
           <input
             v-if="['price_PEN', 'price_USD', 'stock', 'number_of_days', 'number_of_nights', 'number_of_people'].includes(field)"
             v-model="form[field]" type="number" class="form-control" />
-          <input v-else-if="field==='name'" v-model="form.name" type="text" class="form-control"/>
-          <textarea v-else-if="['description', 'itinerary','reservation_requirements','reservation_included'].includes(field)" 
-          v-model="form[field]" class="form-control" rows="2" />
+          <input v-else-if="field === 'name'" v-model="form.name" type="text" class="form-control" />
+          <textarea v-else-if="['description'].includes(field)" v-model="form[field]" class="form-control" rows="2" />
         </div>
 
-
+        <div class="mb-2">
+          <label class="form-label">Itinerario</label>
+          <QuillEditor theme="snow" toolbar="full" contentType="html" v-model:content="form.itinerary" class="bg-white" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Incluye</label>
+          <QuillEditor theme="snow" toolbar="full" contentType="html" v-model:content="form.reservation_included" class="bg-white" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Requisitos de la reserva</label>
+          <QuillEditor theme="snow" toolbar="full" contentType="html" v-model:content="form.reservation_requirements" class="bg-white" />
+        </div>
 
         <div class="mb-2">
           <label class="form-label">Destino</label>
@@ -89,6 +102,11 @@
           </div>
         </div>
 
+        <div class="mb-2 mt-3">
+          <label class="form-label"> <input v-model="form.visible_in_main_web" class="form-check-input" type="checkbox"
+              id="vivisbleCheck" /> Visible para cliente</label>
+        </div>
+
         <div class="d-flex justify-content-between mt-3">
           <button type="submit" class="btn btn-success" :disabled="guardando">
             <span v-if="guardando" class="spinner-border spinner-border-sm me-1" />Guardar
@@ -106,6 +124,7 @@
 import { ref, onMounted } from 'vue'
 import ProductoService from '@/services/ProductoService'
 import CategoryService from '@/services/CategoryService'
+import ImagenService from '@/services/ImagenService'
 import ActividadService from '@/services/ActividadService'
 import DestinoService from '@/services/DestinoService'
 import { showSuccess, showError, showConfirm } from '@/utils/alert'
@@ -114,6 +133,7 @@ import AdminTable from '@/components/Table.vue'
 import AdminModal from '@/components/Modal.vue'
 import Multiselect from 'vue-multiselect'
 
+
 const productos = ref([])
 const categorias = ref([])
 const actividades = ref([])
@@ -121,12 +141,15 @@ const destinos = ref([])
 const imagenes = ref([])
 const imagenesPreview = ref([])
 const brochure = ref(null)
-
+const image_ids = ref([])
 const loading = ref(false)
 const mostrarModal = ref(false)
 const error = ref('')
 const errores = ref({})
 const guardando = ref(false)
+
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const campos = {
   name: 'Nombre',
@@ -137,9 +160,7 @@ const campos = {
   number_of_days: 'Nro. de días',
   number_of_nights: 'Nro. de noches',
   number_of_people: 'Nro. de personas',
-  itinerary: 'Itinerario',
-  reservation_requirements: 'Requisitos de reserva',
-  reservation_included: 'Incluye',
+
 }
 
 const form = ref({
@@ -186,7 +207,11 @@ const obtenerRelaciones = async () => {
   destinos.value = des.data.data
 }
 
-const abrirFormulario = (producto = null) => {
+const abrirFormulario = async (producto = null) => {
+  if (!categorias.value.length || !destinos.value.length) {
+    await obtenerRelaciones()
+  }
+
   if (producto) {
     form.value = {
       ...producto,
@@ -201,6 +226,7 @@ const abrirFormulario = (producto = null) => {
       reservation_included: '', destino_id: null, category_id: null, activities: [], visible_in_main_web: false,
     })
   }
+
   imagenes.value = []
   imagenesPreview.value = []
   brochure.value = null
@@ -208,6 +234,7 @@ const abrirFormulario = (producto = null) => {
   error.value = ''
   mostrarModal.value = true
 }
+
 
 const cerrarModal = () => { mostrarModal.value = false }
 
@@ -230,36 +257,67 @@ const guardarProducto = async () => {
   if (!form.value.name) errores.value.name = 'Nombre obligatorio'
   if (Object.keys(errores.value).length) return
 
-  const payload = {
-    ...form.value,
-    destino_id: form.value.destino_id?.id || null,
-    category_id: form.value.category_id?.id || null,
-    activities: form.value.activities.map(a => a.id),
+  image_ids.value = []
+
+  if (imagenes.value.length > 0) {
+    for (const file of imagenes.value) {
+      const formDataimages = new FormData()
+      formDataimages.append('title', file.name)
+      formDataimages.append('url', file)
+
+      const res = await ImagenService.postImagen(formDataimages)
+      image_ids.value.push(res.data.data.id)
+    }
+  }
+
+  const formDataProducto = new FormData()
+
+  for (const key in form.value) {
+    if (
+      ['destino_id', 'category_id', 'activities', 'file'].includes(key) ||
+      form.value[key] === null ||
+      form.value[key] === ''
+    ) continue
+
+    formDataProducto.append(key, typeof form.value[key] === 'boolean' ? (form.value[key] ? '1' : '0') : form.value[key])
+
+  }
+
+  if (form.value.destino_id?.id) {
+    formDataProducto.append('destino_id', form.value.destino_id.id)
+  }
+
+  if (form.value.category_id?.id) {
+    formDataProducto.append('category_id', form.value.category_id.id)
+  }
+
+  if (form.value.activities.length > 0) {
+    form.value.activities.forEach(idObj => {
+      formDataProducto.append('activity_ids[]', idObj.id)
+    })
+  }
+
+  if (brochure.value) {
+    formDataProducto.append('file', brochure.value)
+  }
+  if (image_ids.value.length > 0) {
+    image_ids.value.forEach(id => {
+      formDataProducto.append('image_ids[]', id)
+    })
   }
 
   guardando.value = true
   try {
     let res
     if (form.value.id) {
-      res = await ProductoService.patchProducto(form.value.id, payload)
+      res = await ProductoService.patchProducto(form.value.id, formDataProducto)
       showSuccess('Actualizado correctamente')
     } else {
-      res = await ProductoService.postProducto(payload)
+      console.log([...formDataProducto.entries()])
+
+      res = await ProductoService.postProducto(formDataProducto)
+      console.log(res)
       showSuccess('Creado correctamente')
-    }
-
-    const id = res.data.id
-
-    if (imagenes.value.length > 0) {
-      const formData = new FormData()
-      imagenes.value.forEach(file => formData.append('images[]', file))
-      await ProductoService.uploadImagenes(id, formData)
-    }
-
-    if (brochure.value) {
-      const brochureData = new FormData()
-      brochureData.append('file', brochure.value)
-      await ProductoService.uploadBrochure(id, brochureData)
     }
 
     await obtenerProductos()
@@ -270,6 +328,7 @@ const guardarProducto = async () => {
   } finally {
     guardando.value = false
   }
+
 }
 
 const eliminarProducto = async (id) => {

@@ -63,7 +63,7 @@
       <div class="row g-3">
         <div class="col-6 col-md-4 col-lg-3" v-for="destino in destinosPopulares" :key="destino.id">
           <a href="#"><div class="destino-card position-relative rounded-4 overflow-hidden">
-            <img :src="destino.imagen" alt="Destino" class="img-fluid w-100 h-100 object-cover" />
+            <img :src="getImagenUrl(destino.image.url)" alt="Destino" class="img-fluid w-100 h-100 object-cover" />
             <div class="destino-nombre text-white fw-bold">{{ destino.nombre }}</div>
             <div class="destino-fav position-absolute top-0 end-0 m-2">
               <i class="bi bi-heart rounded-circle border border-2 p-1 text-warning bg-white"></i>
@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <a href="/tours/all" class="btn btn-outline-success px-4 py-3 rounded-4">  
+        <a href="/tours/todos" class="btn btn-outline-success px-4 py-3 rounded-4">  
           Ver más tours
         </a>
       </div>
@@ -329,72 +329,100 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import BannerService from '../../services/BannerService';
+import DestinoService from '../../services/DestinoService'
+import ProductoService from '../../services/ProductoService'
 import TourCard from '@/components/CardProduct.vue'
 
-// const textos = ref({})
-const banner=ref([])
 
+const banner=ref([])
+const destinosPopulares=ref([])
+const toursFavoritos=ref([])
+let res
 const loadBanner=async()=>{
   const response = await BannerService.getBanner();
     banner.value = response.data;
 }
+const obtenerDestinos= async ()=>{
+  try{
+    res=await DestinoService.getDestinos();
+    destinosPopulares.value=res.data.data.filter(destino => 
+      destino.visible_in_main_web === true
+    );
+    console.log(destinosPopulares)
+  }catch(error){
+    console.log(error)
+  }
+}
 
-// const getTextos = async () => {
-//   const response = await fetch('/textos/vista_principal_usuario.json')
-//   const data = await response.json()
-//   textos.value = data
-//   console.log(textos);
-// }
+const obtenerToursFavoritos=async ()=>{
+  res=await ProductoService.getProductos();
+  try{
+    toursFavoritos.value=res.data.data.filter(tour=>
+    tour.visible_in_main_web===true);
+  }
+  catch(error){
+    console.log(error)
+  }
+}
+
+const getImagenUrl = (imagen) => {
+    if (imagen) {
+        return process.env.VUE_APP_API_URL + "/storage/" + imagen;
+    }
+}
+
 
 onMounted(() => {
   loadBanner();
-})
+  obtenerDestinos();
+  obtenerToursFavoritos();
+})  
 
 
-const destinosPopulares = [
-  {
-    nombre: 'Machu Picchu',
-    imagen: '/images/destinosPopulares/machu.png',
-    ancho: 300,
-    altura: 250
-  },
-  {
-    nombre: 'Lago Titicaca',
-    imagen: '/images/destinosPopulares/titicaca.png',
-    altura: 300
-  },
-  {
-    nombre: 'Arequipa',
-    imagen: '/images/destinosPopulares/arequipa.png',
-    altura: 220
-  },
-  {
-    nombre: 'Paracas',
-    imagen: '/images/destinosPopulares/paracas.png',
-    altura: 280
-  },
-  {
-    nombre: 'Huaraz',
-    imagen: '/images/destinosPopulares/huaraz.png',
-    altura: 260
-  },
-  {
-    nombre: 'Iquitos',
-    imagen: '/images/destinosPopulares/iquitos.png',
-    altura: 240
-  }
-]
+// const destinosPopulares = [
+//   {
+//     nombre: 'Machu Picchu',
+//     imagen: '/images/destinosPopulares/machu.png',
+//     ancho: 300,
+//     altura: 250
+//   },
+//   {
+//     nombre: 'Lago Titicaca',
+//     imagen: '/images/destinosPopulares/titicaca.png',
+//     altura: 300
+//   },
+//   {
+//     nombre: 'Arequipa',
+//     imagen: '/images/destinosPopulares/arequipa.png',
+//     altura: 220
+//   },
+//   {
+//     nombre: 'Paracas',
+//     imagen: '/images/destinosPopulares/paracas.png',
+//     altura: 280
+//   },
+//   {
+//     nombre: 'Huaraz',
+//     imagen: '/images/destinosPopulares/huaraz.png',
+//     altura: 260
+//   },
+//   {
+//     nombre: 'Iquitos',
+//     imagen: '/images/destinosPopulares/iquitos.png',
+//     altura: 240
+//   }
+// ]
 
-const toursFavoritos = [
-  { nombre: 'Cusco Mágico', precio: '999', imagen: '/images/toursFavoritos/cusco.png' },
-  { nombre: 'Arequipa Blanca', precio: '850', imagen: '/images/toursFavoritos/arequipa.png' },
-  { nombre: 'Selva Viva', precio: '780', imagen: '/images/toursFavoritos/selva.png' },
-  { nombre: 'Colca Adventure', precio: '720', imagen: '/images/toursFavoritos/colca.png' },
-  { nombre: 'Lima City Tour', precio: '500', imagen: '/images/toursFavoritos/lima.png' },
-  { nombre: 'Puno Encantado', precio: '890', imagen: '/images/toursFavoritos/puno.png' },
-  { nombre: 'Huaraz Trekking', precio: '950', imagen: '/images/toursFavoritos/huaraz.png' },
-  { nombre: 'Paracas & Ica', precio: '690', imagen: '/images/toursFavoritos/paracas.png' }
-]
+// const toursFavoritos = [
+//   { nombre: 'Cusco Mágico', precio: '999', imagen: '/images/toursFavoritos/cusco.png' },
+//   { nombre: 'Arequipa Blanca', precio: '850', imagen: '/images/toursFavoritos/arequipa.png' },
+//   { nombre: 'Selva Viva', precio: '780', imagen: '/images/toursFavoritos/selva.png' },
+//   { nombre: 'Colca Adventure', precio: '720', imagen: '/images/toursFavoritos/colca.png' },
+//   { nombre: 'Lima City Tour', precio: '500', imagen: '/images/toursFavoritos/lima.png' },
+//   { nombre: 'Puno Encantado', precio: '890', imagen: '/images/toursFavoritos/puno.png' },
+//   { nombre: 'Huaraz Trekking', precio: '950', imagen: '/images/toursFavoritos/huaraz.png' },
+//   { nombre: 'Paracas & Ica', precio: '690', imagen: '/images/toursFavoritos/paracas.png' }
+// ]
 
 
 

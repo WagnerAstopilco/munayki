@@ -192,6 +192,10 @@ const guardarPromocion = async () => {
     if (!form.value.name) errores.value.name = 'Nombre obligatorio'
     if (Object.keys(errores.value).length) return
 
+    if (Array.isArray(form.value.product_ids)) {
+        form.value.product_ids = form.value.product_ids.map(p => p.id)
+    }
+    
     const payload = {
         name: form.value.name,
         description: form.value.description,

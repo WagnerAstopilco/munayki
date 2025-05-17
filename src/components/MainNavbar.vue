@@ -51,21 +51,21 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'holydays' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'festivos' } }" class="nav-link d-flex flex-column align-items-center">
                                     <img src="/images/categorias navbar/festivos.svg"
                                         style="width: 50px; height: 50px;">
                                     Fechas Festivas
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'nacionals' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'nacionales' } }" class="nav-link d-flex flex-column align-items-center">
                                     <img src="/images/categorias navbar/nacional.svg"
                                         style="width: 50px; height: 50px;">
                                     Nacionales
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'internacionals' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'Internacionales' } }" class="nav-link d-flex flex-column align-items-center">
                                     <img src="/images/categorias navbar/internacional.svg"
                                         style="width: 50px; height: 50px;">
                                     Internacionales

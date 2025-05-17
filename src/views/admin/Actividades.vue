@@ -100,16 +100,16 @@ const obtenerActividades = async () => {
 }
 
 const obtenerProductos = async () => {
-    loading.value = true
-    try {
-        const res = await ProductoService.getProductos()
-        productos.value = Array.isArray(res.data.data) ? res.data.data : []
+  loading.value = true
+  try {
+    const res = await ProductoService.getProductos()
+    productos.value = Array.isArray(res.data.data) ? res.data.data : []
 
-    } catch (err) {
-        console.error(err)
-    } finally {
-        loading.value = false
-    }
+  } catch (err) {
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
 }
 const abrirFormulario = (actividad = null) => {
   form.value = actividad
@@ -132,10 +132,14 @@ const guardarActividad = async () => {
   if (!form.value.name) errores.value.name = 'Nombre obligatorio'
   if (Object.keys(errores.value).length) return
 
+  if (Array.isArray(form.value.product_ids)) {
+    form.value.product_ids = form.value.product_ids.map(p => p.id)
+  }
+  
   const payload = {
     name: form.value.name,
     description: form.value.description,
-        product_ids: form.value.product_ids || [],
+    product_ids: form.value.product_ids || [],
   }
 
   guardando.value = true
@@ -169,7 +173,7 @@ const eliminarActividad = async (id) => {
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   obtenerActividades()
   obtenerProductos()
 })

@@ -90,6 +90,7 @@ const guardando = ref(false)
 const form = ref({
     id: null,
     name: '',
+    slug:'',
     description: '',
     parent_id: null,
 })
@@ -117,6 +118,7 @@ const abrirFormulario = (categoria = null) => {
         form.value = {
             id: null,
             name: '',
+            slug:'',
             description: '',
             parent_id: null
         }
@@ -140,12 +142,25 @@ const guardarCategoria = async () => {
     if (!form.value.name) errores.value.name = 'Nombre obligatorio'
     if (Object.keys(errores.value).length) return
 
+    const nombreNormalizado = form.value.name.trim().toLowerCase()
+
+    // const payload = {
+    //     name: form.value.name,
+    //     slug: form.value.name.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-'),
+    //     description: form.value.description,
+    //     parent_id: form.value.parent_id?.id || null,
+    // }
     const payload = {
-        name: form.value.name,
-        slug: form.value.name.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-'),
-        description: form.value.description,
-        parent_id: form.value.parent_id?.id || null,
-    }
+    name: nombreNormalizado,
+    slug: nombreNormalizado
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-'),
+    description: form.value.description,
+    parent_id: form.value.parent_id?.id || null,
+}
 
     guardando.value = true
 

@@ -3,36 +3,10 @@
         <div class="row align-items-center justify-content-center bg-dark text-white" style="height: 200px;"></div>
         <div class="container">
             <section class="full-screen mb-4">
-              
-                <div class="row g-4 p-5">
-                    <div class="col-12 col-sm-6 col-md-3" v-for="(tour, index) in toursFavoritos" :key="index">
-                        <div class="card tour-card border-0 shadow-sm h-100 text-white">
-                            <div class="position-relative">
-                                <img :src="tour.imagen" class="card-img-top img-cover" :alt="tour.nombre">
-                                <div class="overlay-gradient d-flex flex-column justify-content-end p-3">
-                                    <div class="mb-2">
-                                        <span class="text-warning">★★★★★</span>
-                                    </div>
-                                    <h5 class="mb-1 fw-bold">
-                                        {{ tour.nombre }}
-                                    </h5>
-                                    <p class="mb-2">
-                                        <i class="bi bi-geo-alt-fill me-1" /> Ayacucho, Perú
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <a href="/tours/1"
-                                            class="btn btn-success btn-sm d-flex align-items-center">
-                                            VER MÁS
-                                        </a>
-                                        <a href="https://wa.me/tu_numero" target="_blank"
-                                            class="btn btn-success btn-sm d-flex align-items-center">
-                                            <i class="bi bi-whatsapp me-1" />
-                                        </a>
-                                        <span class="fw-bold fs-5">Desde S/ {{ tour.precio }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row g-4 p-5">                    
+<h5>{{name}}</h5>
+                    <div class="col-12 col-md-3" v-for="(tour, index) in tours" :key="index">
+                        <TourCard :tour="tour" class="img-fluid" />
                     </div>
                 </div>
             </section>
@@ -40,17 +14,37 @@
     </div>
 </template>
 <script setup>
-const toursFavoritos = [
-    { nombre: 'Cusco Mágico', precio: '999', imagen: '/images/toursFavoritos/cusco.png' },
-    { nombre: 'Arequipa Blanca', precio: '850', imagen: '/images/toursFavoritos/arequipa.png' },
-    { nombre: 'Selva Viva', precio: '780', imagen: '/images/toursFavoritos/selva.png' },
-    { nombre: 'Colca Adventure', precio: '720', imagen: '/images/toursFavoritos/colca.png' },
-    { nombre: 'Lima City Tour', precio: '500', imagen: '/images/toursFavoritos/lima.png' },
-    { nombre: 'Puno Encantado', precio: '890', imagen: '/images/toursFavoritos/puno.png' },
-    { nombre: 'Huaraz Trekking', precio: '950', imagen: '/images/toursFavoritos/huaraz.png' },
-    { nombre: 'Paracas & Ica', precio: '690', imagen: '/images/toursFavoritos/paracas.png' }
-]
+import { ref, onMounted,watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import ProductoService from '../../services/ProductoService'
+import TourCard from '@/components/CardProduct.vue'
+const route = useRoute()
+let res
+const tours=ref({})
 
+const name = computed(() => {
+  return route.params.category?.replaceAll('-', ' ') || ''
+})
+watch(name, () => {
+  obtenerTours()
+})
+
+
+const obtenerTours=async()=>{
+    res = await ProductoService.getProductos();
+    if (name.value.toLowerCase() === 'todos') {
+    tours.value = res.data.data
+  } else {
+    tours.value = res.data.data.filter(producto => producto.category.name.toLowerCase() === name.value.toLowerCase())
+  }
+    // tours.value=res.data.data.filter(producto=>producto.category.name===name.value)
+}
+
+
+onMounted(() => {
+  obtenerTours();
+})  
 </script>
 
 <style scoped>
@@ -173,3 +167,6 @@ const toursFavoritos = [
     font-size: 22px;
 }
 </style>
+
+
+

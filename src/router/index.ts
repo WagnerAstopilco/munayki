@@ -12,6 +12,7 @@ import Productos from '@/views/admin/Productos.vue'
 import Usuarios from '@/views/admin/Usuarios.vue'
 import Promociones from '@/views/admin/Promociones.vue'
 import Cupones from '@/views/admin/Cupones.vue'
+import Reservas from '@/views/admin/Reservas.vue'
 import Banners from '@/views/admin/Banners.vue'
 import DetalleProducto from '@/views/public/DetalleProducto.vue'
 import Tours from '@/views/public/Tours.vue'
@@ -26,8 +27,8 @@ const routes = [
     children: [
       { path: '', name: 'home', component: HomeView },
       { path: 'tours/:category/:slug', name: 'DetalleProducto', component: DetalleProducto },
-      { path: 'tours/:category', name: 'CategoriasNav', component: Tours },
-
+      { path: '/tours/:parent/:category/:slug', name: 'DetalleProductoConParent', component: DetalleProducto},
+      { path: '/tours/:category', name: 'CategoriasNav', component: Tours },
     ],
     meta: { requiresAuth: false },
   },
@@ -41,11 +42,12 @@ const routes = [
       { path: 'categorias', name: 'Categorias', component: Categorias },
       { path: 'destinos', name: 'Destinos', component: Destinos },
       { path: 'actividades', name: 'Actividades', component: Actividades },
-      { path: 'productos', name: 'Productos', component: Productos }, 
-      {path: 'cupones', name: 'Cupones', component: Cupones},
-      {path: 'promociones', name:'Promociones', component: Promociones},
-      {path: 'usuarios', name:'Usuarios', component: Usuarios},
-      {path: 'banners', name:'Banners', component: Banners},
+      { path: 'productos', name: 'Productos', component: Productos },
+      { path: 'cupones', name: 'Cupones', component: Cupones },
+      { path: 'promociones', name: 'Promociones', component: Promociones },
+      { path: 'usuarios', name: 'Usuarios', component: Usuarios },
+      { path: 'banners', name: 'Banners', component: Banners },
+      { path:'reservas', name:'Reservas', component:Reservas}
 
     ],
     meta: { requiresAuth: true, role: 'admin' },

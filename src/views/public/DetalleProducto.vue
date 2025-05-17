@@ -10,8 +10,10 @@
                 <div class="col-md-7">
                     <div id="carouselTourImages" class="carousel slide" data-bs-ride="carousel" ref="carouselRef">
                         <div class="carousel-inner rounded-4 overflow-hidden">
-                            <div v-for="(img, i) in images" :key="i" class="carousel-item" :class="{ active: i === 0 }">
-                                <img :src="img" class="d-block w-100" alt="Imagen del tour" />
+                            <div v-for="(img, i) in tour.images" :key="i" class="carousel-item"
+                                :class="{ active: i === 0 }">
+                                <img :src="getImagenUrl(img.url)" class="d-block w-100" alt="Imagen del tour"
+                                    style="height: 400px; object-fit: contain;" />
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselTourImages"
@@ -24,20 +26,27 @@
                         </button>
                     </div>
                     <div class="d-flex justify-content-center mt-3">
-                        <img v-for="(img, i) in images" :key="i" :src="img" @click="goToSlide(i)"
-                            :class="['me-2 rounded-2 border border-light preview',{ 'border-primary border-2 scale-up': i === activeIndex } ]"
+                        <img v-for="(img, i) in tour.images" :key="i" :src="getImagenUrl(img.url)" @click="goToSlide(i)"
+                            :class="['me-2 rounded-2 border border-light preview', { 'border-primary border-2 scale-up': i === activeIndex }]"
                             style="width: 70px; height: 50px; object-fit: cover; cursor: pointer" />
                     </div>
                 </div>
 
                 <!-- Detalles -->
                 <div class="col-md-5 card p-4">
-                    <h4 class="fw-bold">Ayacucho 03D/02N</h4>
-                    <p class="text-muted mb-1"><i class="bi bi-geo-alt-fill text-warning"></i> Ayacucho, Perú</p>
-                    <button class="btn btn-warning btn-sm mb-3">Descargar Brochure</button>
+                    <h4 class="fw-bold">{{ tour.name }}</h4>
+                    <p class="text-muted mb-1"><i class="bi bi-geo-alt-fill text-warning"></i> {{ tour.destino?.place
+                    }},
+                        {{ tour.destino?.country.toUpperCase() }}</p>
+                    <!-- <button class="btn btn-warning btn-sm mb-3">Descargar Brochure</button> -->
+                    <a class="btn btn-warning btn-sm mb-3" :href="getFileUrl(tour.file)" download target="_blank"
+                        v-if="tour.file">
+                        Descargar Brochure
+                    </a>
+
 
                     <p class="fw-semibold mb-1">Precio por persona:</p>
-                    <p class="fs-3 fw-bold text-danger">S/ 430.00</p>
+                    <p class="fs-3 fw-bold text-danger">S/. {{ tour.price_PEN }}</p>
                     <hr>
                     <div class="mb-3">
                         <p class="fw-bold mb-1">Incluye</p>
@@ -51,18 +60,49 @@
 
                     <p class="fw-bold mb-0">Actividades</p>
                     <p class="text-muted small">
-                        Caminatas / Complejo arqueológico / Museos / Naturaleza / Textilería
+                        {{tour.activities?.map(act => act.name).join(' / ')}}
                     </p>
 
                     <p class="fw-bold mb-0">Categoría</p>
-                    <p class="text-muted small">Destinos Nacionales</p>
+                    <p class="text-muted small">{{ tour.category?.name }}</p>
                     <hr>
                     <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-warning fw-bold">Reservar Ahora</button>
-                        <a href="#" class="btn btn-success fw-bold">Por WhatsApp</a>
+                        <button class="btn btn-warning fw-bold" @click="abrirFormulario()">Reservar Ahora</button>
+                        <a href="https://wa.me/51940055540" target="_blank" class="btn btn-success fw-bold">Por
+                            WhatsApp</a>
                     </div>
                 </div>
             </div>
+            <!-- MODAL -->
+            <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
+                <h5 class="mb-3">Nueva Reserva</h5>
+                <form @submit.prevent="guardarReserva">
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de inicio</label>
+                        <input v-model="form.start_date" type="date" class="form-control" />
+                        <div v-if="errores.start_date" class="text-danger small">{{ errores.start_date }}</div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de fin</label>
+                        <input v-model="form.end_date" type="date" class="form-control" />
+                        <div v-if="errores.end_date" class="text-danger small">{{ errores.end_date }}</div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">N° de viajeros</label>
+                        <input v-model="form.number_of_people" type="number" class="form-control" />
+                        <div v-if="errores.number_of_people" class="text-danger small">{{ errores.number_of_people }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="submit" class="btn btn-success" :disabled="guardando">
+                            <span v-if="guardando" class="spinner-border spinner-border-sm me-1" />Guardar
+                        </button>
+                        <button type="button" class="btn btn-outline-light" @click="cerrarModal">Cancelar</button>
+                    </div>
+                    <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
+                </form>
+            </ReservaModal>
 
             <!-- Tabs -->
             <div class="mt-5">
@@ -76,29 +116,21 @@
                 </ul>
                 <div class="tab-content bg-light p-4 rounded">
                     <div v-if="currentTab === 'itinerario'">
-                        <ul>
-                            <li><strong>Día 01:</strong> City Tour</li>
-                            <li><strong>Día 02:</strong> Millpu - Aguas Turquesas</li>
-                            <li><strong>Día 03:</strong> Vilcashuamán - Intihuatana</li>
-                        </ul>
+                        <div v-html="tour.itinerary" class="prose max-w-none"></div>
                     </div>
-                    <div v-else-if="currentTab === 'incluye'"  id="incluye">
+                    <div v-else-if="currentTab === 'incluye'" id="incluye">
                         <div class="container">
-                            <QuillEditor theme="snow" toolbar="full" />
-                            <p>Transporte, hotel, guía, desayuno, entradas.</p>
-
+                            <div v-html="tour.reservation_included" class="prose max-w-none"></div>
                         </div>
                     </div>
                     <div v-else-if="currentTab === 'metodos'">
                         <p>Transferencias, Yape, Plin, tarjeta crédito/débito.</p>
                     </div>
                     <div v-else-if="currentTab === 'requisitos'" id="requisitos">
-                        <QuillEditor theme="snow" />
-                        <p>Documento de identidad, buen estado físico, ropa ligera.</p>
+                        <div v-html="tour.reservation_requirements" class="prose max-w-none"></div>
                     </div>
                     <div v-else-if="currentTab === 'descripcion'" id="descripcion">
-                        <QuillEditor theme="snow" />
-                        <p>Descubre Ayacucho en un viaje de 3 días lleno de historia, naturaleza y cultura viva.</p>
+                        <div v-html="tour.description" class="prose max-w-none"></div>
                     </div>
                 </div>
             </div>
@@ -110,45 +142,140 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Carousel } from 'bootstrap'
-import {QuillEditor} from '@vueup/vue-quill'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { parseError } from '../../utils/parseError'
+import { showSuccess, showError, showConfirm } from '../../utils/alert'
+import ProductoService from '../../services/ProductoService'
+import ReservaService from '../../services/ReservaService'
+import ReservaModal from '../../components/Modal.vue'
 
 const carouselRef = ref(null)
 const activeIndex = ref(0)
+const route = useRoute()
+let res
+const tour = ref({})
+const mostrarModal = ref(false)
+const error = ref('')
+const errores = ref({})
+const guardando = ref(false)
+const today = new Date().toISOString().slice(0, 10)
 
 const currentTab = ref('itinerario')
-
-
 const tabs = [
-  { name: 'itinerario', label: 'Itinerario' },
-  { name: 'incluye', label: 'Incluye' },
-  { name: 'metodos', label: 'Métodos de pago' },
-  { name: 'requisitos', label: 'Requisitos' },
-  { name: 'descripcion', label: 'Descripción' }
+    { name: 'itinerario', label: 'Itinerario' },
+    { name: 'incluye', label: 'Incluye' },
+    { name: 'metodos', label: 'Métodos de pago' },
+    { name: 'requisitos', label: 'Requisitos' },
+    { name: 'descripcion', label: 'Descripción' }
 ]
 
-
-const images = [
-    'https://i.ibb.co/1Zc7z5t/aya1.jpg',
-    'https://i.ibb.co/dPbrnJ9/aya2.jpg',
-    'https://i.ibb.co/tswRMrf/aya3.jpg',
-    'https://i.ibb.co/0pFkbNb/aya4.jpg',
-    'https://i.ibb.co/MBXHH7J/aya5.jpg'
-]
+const options = {
+    readOnly: true,
+}
 
 
+
+const form = ref({
+    id: null,
+    user_id: null,
+    product_id: null,
+    reservation_date: '',
+    number_of_people: '',
+    status: '',
+    total_price: '',
+    start_date: '',
+    end_date: '',
+})
+
+const name = computed(() => {
+    return '/' + route.fullPath.replace(/^\/tours\//, '')
+})
+
+const obtenerProducto = async () => {
+    res = await ProductoService.getProductos();
+    tour.value = res.data.data.find(producto => producto.slug === name.value);
+}
+
+const getImagenUrl = (imagen) => {
+    if (imagen) {
+        return process.env.VUE_APP_API_URL + "/storage/" + imagen;
+    }
+}
+
+const getFileUrl = (fileName) => {
+    return fileName ? `${process.env.VUE_APP_API_URL}/storage/${fileName}` : '#'
+}
 
 const goToSlide = (index) => {
-  const bsCarousel = Carousel.getInstance(carouselRef.value) || new Carousel(carouselRef.value)
-  bsCarousel.to(index)
-  activeIndex.value = index
+    const bsCarousel = Carousel.getInstance(carouselRef.value) || new Carousel(carouselRef.value)
+    bsCarousel.to(index)
+    activeIndex.value = index
+}
+
+const abrirFormulario = () => {
+    form.value = {
+        id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
+        status: '', total_price: '', start_date: '', end_date: '',
+    }
+    errores.value = {}
+    error.value = ''
+    mostrarModal.value = true
+}
+const cerrarModal = () => {
+    mostrarModal.value = false
+    form.value = {
+        id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
+        status: '', total_price: '', start_date: '', end_date: '',
+    }
+}
+const guardarReserva = async () => {
+    errores.value = {}
+    error.value = ''
+    if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
+    if (Object.keys(errores.value).length) return
+    const payload = {
+        user_id: 1,
+        product_id: tour.value.id,
+        reservation_date: today,
+        number_of_people: form.value.number_of_people,
+        status: 'pendiente',
+        total_price: (form.value.number_of_people * tour.value.price_PEN),
+        start_date: form.value.start_date,
+        end_date: form.value.end_date,
+    }
+
+    guardando.value = true
+    try {
+        await ReservaService.postReservation(payload)
+        showSuccess('Creado correctamente')
+        cerrarModal()
+        // } catch (err) {
+        //     error.value = parseError(err)
+        //     showError('Error al guardar', error.value)
+        // } finally {
+        //     guardando.value = false
+        // }
+    } catch (err) {
+        if (err.response && err.response.status === 422) {
+            console.error('Errores de validación:', err.response.data.errors)
+        }
+        error.value = parseError(err)
+        showError('Error al guardar', error.value)
+    } finally {
+        guardando.value = false
+    }
 }
 
 onMounted(() => {
-  const bsCarousel = new Carousel(carouselRef.value)
+    obtenerProducto();
+    const bsCarousel = new Carousel(carouselRef.value)
 
-  carouselRef.value.addEventListener('slid.bs.carousel', (e) => {
-    activeIndex.value = e.to // índice de la nueva imagen activa
-  })
+    carouselRef.value.addEventListener('slid.bs.carousel', (e) => {
+        activeIndex.value = e.to
+    })
 })
 </script>
 
@@ -165,15 +292,16 @@ onMounted(() => {
 }
 
 .preview {
-  transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .preview:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
+
 .scale-up {
-  transform: scale(1.5);
-  transition: transform 0.3s ease;
-  z-index: 1;
+    transform: scale(1.5);
+    transition: transform 0.3s ease;
+    z-index: 1;
 }
 </style>

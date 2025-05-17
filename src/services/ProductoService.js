@@ -13,12 +13,21 @@ export default {
 
   // Crear nuevo producto
   postProducto(producto) {
-    return apiClient.post('/productos', producto)
+    return apiClient.post('/productos', producto,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
   },
 
   // Actualizar producto existente
   patchProducto(id, producto) {
-    return apiClient.patch(`/productos/${id}`, producto)
+    return apiClient.post(`/productos/${id}`, producto,{
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                "X-HTTP-Method-Override": "PATCH",
+            }
+        });
   },
 
   // Eliminar producto
@@ -27,16 +36,16 @@ export default {
   },
 
   // Subir múltiples imágenes al producto
-  uploadImagenes(id, formData) {
-    return apiClient.post(`/productos/${id}/imagenes`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-  },
+  // uploadImagenes(id, formData) {
+  //   return apiClient.post(`/productos/${id}/imagenes`, formData, {
+  //     headers: { 'Content-Type': 'multipart/form-data' }
+  //   })
+  // },
 
-  // Subir brochure (archivo único)
-  uploadBrochure(id, formData) {
-    return apiClient.post(`/productos/${id}/file`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-  }
+  // // Subir brochure (archivo único)
+  // uploadBrochure(id, formData) {
+  //   return apiClient.post(`/productos/${id}/file`, formData, {
+  //     headers: { 'Content-Type': 'multipart/form-data' }
+  //   })
+  // }
 }

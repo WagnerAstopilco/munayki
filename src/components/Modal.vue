@@ -41,8 +41,8 @@
   padding: 20px;
   width: 100%;
   max-width: 700px;
-  max-height: 90vh; /* Altura máxima del 90% del viewport */
-  overflow-y: auto; /* Scroll interno si se pasa */
+  max-height: 90vh; 
+  overflow-y: auto; 
 }
 
   .fade-enter-active,

@@ -213,20 +213,24 @@ const guardarCupon = async () => {
     if (!form.value.name) errores.value.name = 'Nombre obligatorio'
     if (Object.keys(errores.value).length) return
 
+    if (Array.isArray(form.value.product_ids)) {
+        form.value.product_ids = form.value.product_ids.map(p => p.id)
+    }
+
     const payload = {
         name: form.value.name,
         code: form.value.code,
         description: form.value.description,
         discount_percentage: form.value.discount_percentage,
         max_uses: form.value.max_uses,
-        uses_count: form.value.uses_count||0,
+        uses_count: form.value.uses_count || 0,
         valid_from: form.value.valid_from,
         valid_to: form.value.valid_to,
         product_ids: form.value.product_ids || [],
     }
 
     guardando.value = true
-
+    console.log(payload)
     try {
         if (form.value.id) {
             await CuponService.patchCoupon(form.value.id, payload)
@@ -237,13 +241,15 @@ const guardarCupon = async () => {
         }
         await obtenerCupones()
         cerrarModal()
-    } catch (err) {
+        } catch (err) {
         error.value = parseError(err)
         showError('Error al guardar', error.value)
     } finally {
         guardando.value = false
     }
+    
 }
+
 
 const eliminarCupon = async (id) => {
     const confirmado = await showConfirm('¿Estás seguro?', 'Esta acción eliminará el registro.')

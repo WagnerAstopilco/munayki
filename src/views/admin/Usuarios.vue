@@ -65,7 +65,7 @@
                     <div class="mb-2">
                         <label class="form-label">Teléfono</label>
                         <input v-model="form.phone" type="tel" placeholder="+51 987654321"
-                            pattern="^\+?[0-9\s\-]{7,20}$" class="form-control" />
+                            pattern="^\+?[0-9\s\-\(\)]{7,20}$" class="form-control" />
                         <div v-if="errores.phone" class="text-danger small">{{ errores.phone }}</div>
                     </div>
                     <div class="mb-2">
@@ -198,7 +198,7 @@ const guardarUsuario = async () => {
     if (form.value.profile_photo instanceof File) {
         formData.append('profile_photo', form.value.profile_photo)
     }
-    
+
     guardando.value = true
 
     try {
