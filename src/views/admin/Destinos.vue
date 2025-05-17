@@ -198,7 +198,16 @@ const guardarDestino = async () => {
         imagen.value = null
         await obtenerDestinos()
         cerrarModal()
+    // } catch (err) {
+    //     error.value = parseError(err)
+    //     showError('Error al guardar', error.value)
+    // } finally {
+    //     guardando.value = false
+    // }
     } catch (err) {
+        if (err.response && err.response.status === 422) {
+            console.error('Errores de validación:', err.response.data.errors)
+        }
         error.value = parseError(err)
         showError('Error al guardar', error.value)
     } finally {

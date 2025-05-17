@@ -246,27 +246,19 @@ const guardarReserva = async () => {
         start_date: form.value.start_date,
         end_date: form.value.end_date,
     }
-
+    console.log(payload)
     guardando.value = true
     try {
         await ReservaService.postReservation(payload)
         showSuccess('Creado correctamente')
         cerrarModal()
-        // } catch (err) {
-        //     error.value = parseError(err)
-        //     showError('Error al guardar', error.value)
-        // } finally {
-        //     guardando.value = false
-        // }
-    } catch (err) {
-        if (err.response && err.response.status === 422) {
-            console.error('Errores de validación:', err.response.data.errors)
+        } catch (err) {
+            error.value = parseError(err)
+            showError('Error al guardar', error.value)
+        } finally {
+            guardando.value = false
         }
-        error.value = parseError(err)
-        showError('Error al guardar', error.value)
-    } finally {
-        guardando.value = false
-    }
+    
 }
 
 onMounted(() => {

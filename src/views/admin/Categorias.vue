@@ -144,12 +144,6 @@ const guardarCategoria = async () => {
 
     const nombreNormalizado = form.value.name.trim().toLowerCase()
 
-    // const payload = {
-    //     name: form.value.name,
-    //     slug: form.value.name.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-'),
-    //     description: form.value.description,
-    //     parent_id: form.value.parent_id?.id || null,
-    // }
     const payload = {
     name: nombreNormalizado,
     slug: nombreNormalizado

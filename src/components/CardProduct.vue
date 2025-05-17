@@ -19,7 +19,7 @@
 
 
                         <h5 class="mb-1 fw-bold">
-                            {{ tour.nombre }}
+                            {{ tour.name }}
                         </h5>
                         <p class="mb-2">
                             <i class="bi bi-geo-alt-fill me-1"></i> {{tour.destino.place}}, {{tour.destino.country.toUpperCase()}}

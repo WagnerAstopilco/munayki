@@ -10,8 +10,7 @@
         <div v-else>
             <ReservasTable :datos="reservas" :campos-filtrables="['status']" :por-pagina="20" :exportable="true">
                 <template #thead>
-                    <th>Usuario</th>
-                    <th>Producto</th>
+                    <th>Cliente</th>
                     <th>Precio total</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -19,10 +18,9 @@
 
                 <template #row="{ item }">
                     <tr @click="abrirFormulario(item)" class="cursor-pointer">
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.id }}</td>
+                        <td>{{ item.user.names }} {{ item.user.last_names }} </td>
+                        <td>{{ item.total_price }}</td>
+                        <td>{{ item.status }}</td>
 
                         <td>
                             <button class="btn btn-sm btn-outline-warning me-2" @click.stop="abrirFormulario(item)">
