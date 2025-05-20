@@ -74,7 +74,7 @@
                 </div>
             </div>
             <!-- MODAL -->
-            <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
+            <!-- <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
                 <h5 class="mb-3">Nueva Reserva</h5>
                 <form @submit.prevent="guardarReserva">
                     <div class="mb-2">
@@ -102,7 +102,72 @@
                     </div>
                     <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
                 </form>
+            </ReservaModal> -->
+            <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
+                <div class="p-3">
+                    <!-- Título con ícono -->
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold text-primary">
+                            <i class="bi bi-calendar2-check-fill me-2"></i>Reserva tu aventura
+                        </h3>
+                        <p class="text-muted">Completa el formulario para confirmar tu reserva</p>
+                    </div>
+
+                    <form @submit.prevent="guardarReserva">
+                        <!-- Fecha de inicio -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-calendar-date me-2"></i>Fecha de inicio
+                            </label>
+                            <input v-model="form.start_date" type="date" class="form-control" />
+                            <div v-if="errores.start_date" class="text-danger small">{{ errores.start_date }}</div>
+                        </div>
+
+                        <!-- Fecha de fin -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-calendar3 me-2"></i>Fecha de fin
+                            </label>
+                            <input v-model="form.end_date" type="date" class="form-control" />
+                            <div v-if="errores.end_date" class="text-danger small">{{ errores.end_date }}</div>
+                        </div>
+
+                        <!-- Número de viajeros -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-people-fill me-2"></i>N° de viajeros
+                            </label>
+                            <input v-model="form.number_of_people" type="number" class="form-control" min="1" />
+                            <div v-if="errores.number_of_people" class="text-danger small">{{ errores.number_of_people
+                            }}</div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <button type="submit" class="btn btn-success px-4" @click="guardarReserva"
+                                :disabled="guardando">
+                                <span v-if="guardando" class="spinner-border spinner-border-sm me-2" />
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+
+                            <button type="button" class="btn btn-outline-secondary" @click="cerrarModal">
+                                <i class="bi bi-x-circle me-1"></i>Cancelar
+                            </button>
+
+                            <!-- Botón para pagar -->
+                            <button type="button" class="btn btn-primary" @click="realizarPago">
+                                <i class="bi bi-credit-card-fill me-1"></i>Pagar ahora
+                            </button>
+                        </div>
+
+                        <!-- Mensaje de error -->
+                        <div v-if="error" class="alert alert-danger mt-3 d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                        </div>
+                    </form>
+                </div>
             </ReservaModal>
+
 
             <!-- Tabs -->
             <div class="mt-5">
@@ -252,14 +317,67 @@ const guardarReserva = async () => {
         await ReservaService.postReservation(payload)
         showSuccess('Creado correctamente')
         cerrarModal()
-        } catch (err) {
-            error.value = parseError(err)
-            showError('Error al guardar', error.value)
-        } finally {
-            guardando.value = false
-        }
-    
+    } catch (err) {
+        error.value = parseError(err)
+        showError('Error al guardar', error.value)
+    } finally {
+        guardando.value = false
+    }
 }
+
+const realizarPago = async () => {
+    errores.value = {}
+    error.value = ''
+
+    if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
+    if (Object.keys(errores.value).length) return
+
+    const payload = {
+        user_id: 1,
+        product_id: tour.value.id,
+        reservation_date: today,
+        number_of_people: form.value.number_of_people,
+        status: 'pendiente',
+        total_price: form.value.number_of_people * tour.value.price_PEN,
+        start_date: form.value.start_date,
+        end_date: form.value.end_date,
+    }
+
+    console.log('Reserva:', payload)
+    guardando.value = true
+
+    try {
+        const reserva = await ReservaService.postReservation(payload)
+        const res = await fetch('https://d7af-190-43-17-16.ngrok-free.app/api/pago', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: tour.value.title,
+                quantity: form.value.number_of_people,
+                price: tour.value.price_PEN,
+                reservation_id: reserva.id
+            })
+        })
+
+        const data = await res.json()
+
+        if (data.init_point) {
+            window.location.href = data.init_point
+        } else {
+            console.error('No se recibió init_point:', data)
+            showError('No se pudo generar el pago con Mercado Pago')
+        }
+
+    } catch (err) {
+        error.value = parseError(err)
+        showError('Error al guardar', error.value)
+    } finally {
+        guardando.value = false
+    }
+}
+
 
 onMounted(() => {
     obtenerProducto();
