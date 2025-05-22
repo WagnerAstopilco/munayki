@@ -17,18 +17,18 @@
             :key="index">
             <img :src="slide.image" class="d-block w-100" alt="...">
             <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
-              style="z-index: 10;">
+              style="z-index: 10; width: 100%;">
               <h2 class="h1">
-                {{ slide.title }}
+              {{ slide.title }}
               </h2>
               <p class="h5">
-                {{ slide.description }}
+              {{ slide.description }}
               </p>
               <div class="input-group mt-4 mx-auto" style="max-width: 600px;">
-                <input type="text" class="form-control" placeholder="¿A dónde quieres ir?">
-                <button class="btn btn-warning" type="button">
-                  Buscar
-                </button>
+              <input type="text" class="form-control" placeholder="¿A dónde quieres ir?">
+              <button class="btn btn-warning" type="button">
+                Buscar
+              </button>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
         <div class="col-6 col-md-4 col-lg-3" v-for="destino in destinosPopulares" :key="destino.id">
           <a href="#"><div class="destino-card position-relative rounded-4 overflow-hidden">
             <img :src="getImagenUrl(destino.image.url)" alt="Destino" class="img-fluid w-100 h-100 object-cover" />
-            <div class="destino-nombre text-white fw-bold">{{ destino.nombre }}</div>
+            <div class="destino-nombre text-white fw-bold">{{ destino.place }}<span style="display: block; font-weight: 400; font-size: 0.8em; margin-top: 1px !important;">{{ destino.description }}</span></div>
             <div class="destino-fav position-absolute top-0 end-0 m-2">
               <i class="bi bi-heart rounded-circle border border-2 p-1 text-warning bg-white"></i>
             </div>

@@ -4,7 +4,7 @@
         <div class="container">
             <section class="full-screen mb-4">
                 <div class="row g-4 p-5">                    
-<h5>{{name}}</h5>
+<h5 class="text-center" style="text-transform: uppercase;font-weight: 600;"> {{name}}</h5>
                     <div class="col-12 col-md-3" v-for="(tour, index) in tours" :key="index">
                         <TourCard :tour="tour" class="img-fluid" />
                     </div>

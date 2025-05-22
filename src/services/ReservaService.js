@@ -15,4 +15,8 @@ export default {
     deleteReservation(id){
         return apiClient.delete(`/reservations/${id}`);
     },
+    createPaymentPreference(payload) {
+        return apiClient.post('/mercadopago/preference', payload);
+      }
+      
 }

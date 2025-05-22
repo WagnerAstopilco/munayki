@@ -217,6 +217,9 @@ import ProductoService from '../../services/ProductoService'
 import ReservaService from '../../services/ReservaService'
 import ReservaModal from '../../components/Modal.vue'
 
+import { initMercadoPago } from '@mercadopago/sdk-js'
+const PUBLIC_KEY = 'APP_USR-6390295798809990-052017-dc06605093e6c341c43a8b35389da6aa-2441036561'
+
 const carouselRef = ref(null)
 const activeIndex = ref(0)
 const route = useRoute()
@@ -325,59 +328,31 @@ const guardarReserva = async () => {
     }
 }
 
+
 const realizarPago = async () => {
-    errores.value = {}
-    error.value = ''
-
-    if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
-    if (Object.keys(errores.value).length) return
-
+  try {
     const payload = {
-        user_id: 1,
-        product_id: tour.value.id,
-        reservation_date: today,
-        number_of_people: form.value.number_of_people,
-        status: 'pendiente',
-        total_price: form.value.number_of_people * tour.value.price_PEN,
-        start_date: form.value.start_date,
-        end_date: form.value.end_date,
+      title: tour.value.name,
+      price: parseFloat(tour.value.price_PEN)
     }
 
-    console.log('Reserva:', payload)
-    guardando.value = true
+    const response = await ReservaService.createPaymentPreference(payload)
+    const preferenceId = response.data.id
 
-    try {
-        const reserva = await ReservaService.postReservation(payload)
-        const res = await fetch('https://d7af-190-43-17-16.ngrok-free.app/api/pago', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                title: tour.value.title,
-                quantity: form.value.number_of_people,
-                price: tour.value.price_PEN,
-                reservation_id: reserva.id
-            })
-        })
+    initMercadoPago(PUBLIC_KEY)
+    const mp = new window.MercadoPago(PUBLIC_KEY, { locale: 'es-PE' })
 
-        const data = await res.json()
-
-        if (data.init_point) {
-            window.location.href = data.init_point
-        } else {
-            console.error('No se recibió init_point:', data)
-            showError('No se pudo generar el pago con Mercado Pago')
-        }
-
-    } catch (err) {
-        error.value = parseError(err)
-        showError('Error al guardar', error.value)
-    } finally {
-        guardando.value = false
-    }
+    mp.checkout({
+      preference: {
+        id: preferenceId
+      },
+      autoOpen: true
+    })
+  } catch (error) {
+    console.error('Error al crear la preferencia de pago:', error)
+    showError('No se pudo generar el pago', error.message)
+  }
 }
-
 
 onMounted(() => {
     obtenerProducto();

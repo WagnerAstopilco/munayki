@@ -37,37 +37,37 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav d-flex justify-content-between w-100 ps-4 pe-4">
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'full-days' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'full-days' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/full-days.svg"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 30px; height: 30px;">
                                     Full Days
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'half-days' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'half-days' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/half-days.svg"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 30px; height: 30px;">
                                     Half Days
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'festivos' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'festivos' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/festivos.svg"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 30px; height: 30px;">
                                     Fechas Festivas
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'nacionales' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'nacionales' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/nacional.svg"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 30px; height: 30px;">
                                     Nacionales
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'Internacionales' } }" class="nav-link d-flex flex-column align-items-center">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'Internacionales' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/internacional.svg"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 30px; height: 30px;">
                                     Internacionales
                                 </router-link>
                             </li>
@@ -89,6 +89,10 @@ function cambiarIdioma(idioma) {
 }
 </script>
 <style scoped>
+.text-menu{
+    font-size: 0.9em !important;
+    font-weight: 600 !important;
+}
 .custom-navbar {
     border-radius: 25px;
     width: 100%;

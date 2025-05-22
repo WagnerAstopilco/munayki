@@ -44,6 +44,12 @@
               <a href="#" class="text-white text-decoration-none">Términos y condiciones</a>
             </li>
             <li>
+              <a href="#" class="text-white text-decoration-none">Libro de Reclamaciones</a>
+            </li>
+            <li>
+              <a href="#" class="text-white text-decoration-none">Codigo ESNA</a>
+            </li>
+            <li>
               <a href="#" class="text-white text-decoration-none">Contáctanos</a>
             </li>
           </ul>
