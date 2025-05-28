@@ -1,7 +1,6 @@
 <template>
     <div class="">
-        <div class="row align-items-center justify-content-center bg-success text-white" style="height: 200px;">
-
+        <div class="row align-items-center justify-content-center bg-success" style="height: 200px;">
         </div>
 
         <div class="container mt-4">
@@ -36,7 +35,7 @@
                 <div class="col-md-5 card p-4">
                     <h4 class="fw-bold">{{ tour.name }}</h4>
                     <p class="text-muted mb-1"><i class="bi bi-geo-alt-fill text-warning"></i> {{ tour.destino?.place
-                    }},
+                        }},
                         {{ tour.destino?.country.toUpperCase() }}</p>
                     <!-- <button class="btn btn-warning btn-sm mb-3">Descargar Brochure</button> -->
                     <a class="btn btn-warning btn-sm mb-3" :href="getFileUrl(tour.file)" download target="_blank"
@@ -67,42 +66,14 @@
                     <p class="text-muted small">{{ tour.category?.name }}</p>
                     <hr>
                     <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-warning fw-bold" @click="abrirFormulario()">Reservar Ahora</button>
+                        <!-- <a :href="`/tours${tour.slug}`" class="btn btn-warning fw-bold"> Reservar Ahora</a> -->
+                        <button class="btn btn-warning fw-bold" @click="goToReservation">Reservar Ahora</button>
                         <a href="https://wa.me/51940055540" target="_blank" class="btn btn-success fw-bold">Por
                             WhatsApp</a>
                     </div>
                 </div>
             </div>
-            <!-- MODAL -->
-            <!-- <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
-                <h5 class="mb-3">Nueva Reserva</h5>
-                <form @submit.prevent="guardarReserva">
-                    <div class="mb-2">
-                        <label class="form-label">Fecha de inicio</label>
-                        <input v-model="form.start_date" type="date" class="form-control" />
-                        <div v-if="errores.start_date" class="text-danger small">{{ errores.start_date }}</div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Fecha de fin</label>
-                        <input v-model="form.end_date" type="date" class="form-control" />
-                        <div v-if="errores.end_date" class="text-danger small">{{ errores.end_date }}</div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">N° de viajeros</label>
-                        <input v-model="form.number_of_people" type="number" class="form-control" />
-                        <div v-if="errores.number_of_people" class="text-danger small">{{ errores.number_of_people }}
-                        </div>
-                    </div>
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="submit" class="btn btn-success" :disabled="guardando">
-                            <span v-if="guardando" class="spinner-border spinner-border-sm me-1" />Guardar
-                        </button>
-                        <button type="button" class="btn btn-outline-light" @click="cerrarModal">Cancelar</button>
-                    </div>
-                    <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
-                </form>
-            </ReservaModal> -->
             <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
                 <div class="p-3">
                     <!-- Título con ícono -->
@@ -139,7 +110,7 @@
                             </label>
                             <input v-model="form.number_of_people" type="number" class="form-control" min="1" />
                             <div v-if="errores.number_of_people" class="text-danger small">{{ errores.number_of_people
-                            }}</div>
+                                }}</div>
                         </div>
 
                         <!-- Botones de acción -->
@@ -207,22 +178,28 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Carousel } from 'bootstrap'
-import { QuillEditor } from '@vueup/vue-quill'
+// import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { parseError } from '../../utils/parseError'
-import { showSuccess, showError, showConfirm } from '../../utils/alert'
+// import { parseError } from '../../utils/parseError'
+// import { showSuccess, showError, showConfirm } from '../../utils/alert'
 import ProductoService from '../../services/ProductoService'
-import ReservaService from '../../services/ReservaService'
+// import ReservaService from '../../services/ReservaService'
 import ReservaModal from '../../components/Modal.vue'
 
-import { initMercadoPago } from '@mercadopago/sdk-js'
-const PUBLIC_KEY = 'APP_USR-6390295798809990-052017-dc06605093e6c341c43a8b35389da6aa-2441036561'
+// import { initMercadoPago } from '@mercadopago/sdk-js'
+// const PUBLIC_KEY = 'APP_USR-6390295798809990-052017-dc06605093e6c341c43a8b35389da6aa-2441036561'
+
+
+
+
+
 
 const carouselRef = ref(null)
 const activeIndex = ref(0)
 const route = useRoute()
+const router = useRouter()
 let res
 const tour = ref({})
 const mostrarModal = ref(false)
@@ -230,7 +207,13 @@ const error = ref('')
 const errores = ref({})
 const guardando = ref(false)
 const today = new Date().toISOString().slice(0, 10)
+const tourId = route.params.tourId
 
+
+// Props o datos
+const props = defineProps({
+    tour: Object
+})
 const currentTab = ref('itinerario')
 const tabs = [
     { name: 'itinerario', label: 'Itinerario' },
@@ -240,9 +223,9 @@ const tabs = [
     { name: 'descripcion', label: 'Descripción' }
 ]
 
-const options = {
-    readOnly: true,
-}
+// const options = {
+//     readOnly: true,
+// }
 
 
 
@@ -283,76 +266,81 @@ const goToSlide = (index) => {
     activeIndex.value = index
 }
 
-const abrirFormulario = () => {
-    form.value = {
-        id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
-        status: '', total_price: '', start_date: '', end_date: '',
+// const abrirFormulario = () => {
+//     form.value = {
+//         id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
+//         status: '', total_price: '', start_date: '', end_date: '',
+//     }
+//     errores.value = {}
+//     error.value = ''
+//     mostrarModal.value = true
+// }
+// const cerrarModal = () => {
+//     mostrarModal.value = false
+//     form.value = {
+//         id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
+//         status: '', total_price: '', start_date: '', end_date: '',
+//     }
+// }
+// const guardarReserva = async () => {
+//     errores.value = {}
+//     error.value = ''
+//     if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
+//     if (Object.keys(errores.value).length) return
+//     const payload = {
+//         user_id: 1,
+//         product_id: tour.value.id,
+//         reservation_date: today,
+//         number_of_people: form.value.number_of_people,
+//         status: 'pendiente',
+//         total_price: (form.value.number_of_people * tour.value.price_PEN),
+//         start_date: form.value.start_date,
+//         end_date: form.value.end_date,
+//     }
+//     console.log(payload)
+//     guardando.value = true
+//     try {
+//         await ReservaService.postReservation(payload)
+//         showSuccess('Creado correctamente')
+//         cerrarModal()
+//     } catch (err) {
+//         error.value = parseError(err)
+//         showError('Error al guardar', error.value)
+//     } finally {
+//         guardando.value = false
+//     }
+// }
+
+const goToReservation = () => {
+    if (tour.value && tour.value.slug) {
+        router.push({ name: 'ReservacionProducto', params: { slug: tour.value.slug } })
     }
-    errores.value = {}
-    error.value = ''
-    mostrarModal.value = true
 }
-const cerrarModal = () => {
-    mostrarModal.value = false
-    form.value = {
-        id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
-        status: '', total_price: '', start_date: '', end_date: '',
-    }
-}
-const guardarReserva = async () => {
-    errores.value = {}
-    error.value = ''
-    if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
-    if (Object.keys(errores.value).length) return
-    const payload = {
-        user_id: 1,
-        product_id: tour.value.id,
-        reservation_date: today,
-        number_of_people: form.value.number_of_people,
-        status: 'pendiente',
-        total_price: (form.value.number_of_people * tour.value.price_PEN),
-        start_date: form.value.start_date,
-        end_date: form.value.end_date,
-    }
-    console.log(payload)
-    guardando.value = true
-    try {
-        await ReservaService.postReservation(payload)
-        showSuccess('Creado correctamente')
-        cerrarModal()
-    } catch (err) {
-        error.value = parseError(err)
-        showError('Error al guardar', error.value)
-    } finally {
-        guardando.value = false
-    }
-}
 
+// const realizarPago = async () => {
+//   try {
+//     const payload = {
+//       title: tour.value.name,
+//       price: parseFloat(tour.value.price_PEN)
+//     }
 
-const realizarPago = async () => {
-  try {
-    const payload = {
-      title: tour.value.name,
-      price: parseFloat(tour.value.price_PEN)
-    }
+//     const response = await ReservaService.createPaymentPreference(payload)
+//     const preferenceId = response.data.id
 
-    const response = await ReservaService.createPaymentPreference(payload)
-    const preferenceId = response.data.id
+//     initMercadoPago(PUBLIC_KEY)
+//     const mp = new window.MercadoPago(PUBLIC_KEY, { locale: 'es-PE' })
 
-    initMercadoPago(PUBLIC_KEY)
-    const mp = new window.MercadoPago(PUBLIC_KEY, { locale: 'es-PE' })
-
-    mp.checkout({
-      preference: {
-        id: preferenceId
-      },
-      autoOpen: true
-    })
-  } catch (error) {
-    console.error('Error al crear la preferencia de pago:', error)
-    showError('No se pudo generar el pago', error.message)
-  }
-}
+//     mp.checkout({
+//       preference: {
+//         id: preferenceId
+//       },
+//       autoOpen: true
+//     })
+//   } catch (error) {
+//     console.error('Error al crear la preferencia de pago:', error)
+//     showError('No se pudo generar el pago', error.message)
+//   }
+// }
 
 onMounted(() => {
     obtenerProducto();

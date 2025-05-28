@@ -65,7 +65,7 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'Internacionales' } }" class="nav-link d-flex flex-column align-items-center text-menu">
+                                <router-link :to="{ name: 'CategoriasNav', params: { category: 'internacionales' } }" class="nav-link d-flex flex-column align-items-center text-menu">
                                     <img src="/images/categorias navbar/internacional.svg"
                                         style="width: 30px; height: 30px;">
                                     Internacionales

@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../views/admin/Dashboard.vue'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import PublicLayout from '@/layouts/PublicLayout.vue'
-
 import HomeView from '../views/public/HomeView.vue'
 import Categorias from '@/views/admin/Categorias.vue'
 import Destinos from '@/views/admin/Destinos.vue'
@@ -16,6 +15,8 @@ import Reservas from '@/views/admin/Reservas.vue'
 import Banners from '@/views/admin/Banners.vue'
 import DetalleProducto from '@/views/public/DetalleProducto.vue'
 import Tours from '@/views/public/Tours.vue'
+import Reservacion from '@/views/public/Reservacion.vue'
+
 
 
 const routes = [
@@ -29,6 +30,7 @@ const routes = [
       { path: 'tours/:category/:slug', name: 'DetalleProducto', component: DetalleProducto },
       { path: '/tours/:parent/:category/:slug', name: 'DetalleProductoConParent', component: DetalleProducto},
       { path: '/tours/:category', name: 'CategoriasNav', component: Tours },
+      { path:'/reserva/:slug',name:'ReservacionProducto',component:Reservacion} 
     ],
     meta: { requiresAuth: false },
   },
