@@ -61,7 +61,12 @@
                     <div class="card p-3">
                         <h4>Detalle del Tour</h4>
                         <p><strong>Nombre:</strong> {{ tour.name }}</p>
-                        <p><strong>Precio:</strong> {{ tour.price }}</p>
+                        <p><strong>Precio:</strong> {{ tour.number_of_people>1? tour.price_PEN:`S/.${tour.price_PEN} por persona`}}</p>
+                        <p><strong>Tipo:</strong>
+                            {{ tour.number_of_people > 1 ? `Paquete para ${tour.number_of_people} personas` :
+                            'Individual' }}
+                        </p>
+                        <  
 
 
                         <button class="btn btn-success w-100 mb-2" @click="reservar">
@@ -72,30 +77,31 @@
                         </button>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
 
 </template>
-<!-- <template>
-  <div class="container py-4">
-    
-
-    
-
-    
-  </div>
-</template> -->
 
 <script setup>
-import { reactive, ref, watch } from "vue"
+import { reactive, ref, watch, onMounted,computed } from "vue"
+import ProductoService from '../../services/ProductoService'
+import { useRoute } from 'vue-router'
 
-// Datos del tour (puedes cargar esto dinámicamente)
-const tour = reactive({
-    name: "Tour a Machu Picchu",
-    price: "$150",
-    personsCount: 1,
-})
+
+const tour = ref({})
+const route = useRoute()
+let res
+const slug = route.params.slug
+
+// const name = computed(() => {
+//     return '/' + route.fullPath.replace(/^\/tours\//, '')
+// })
+const obtenerProducto = async () => {
+    const res = await ProductoService.getProductos();
+    tour.value = res.data.data.find(producto => producto.slug === slug);
+}
 
 // Lista reactiva de personas
 const persons = ref([
@@ -152,6 +158,12 @@ const pagar = () => {
         JSON.stringify(persons.value, null, 2)
     )
 }
+
+onMounted(() => {
+    obtenerProducto();
+
+   
+})
 </script>
 
 <style scoped>
