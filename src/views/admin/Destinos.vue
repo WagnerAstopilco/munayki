@@ -136,85 +136,200 @@ const getImagenUrl = (imagen) => {
 }
 
 const abrirFormulario = (destino = null) => {
-    form.value = destino
-        ? { ...destino }
-        : { id: null, name: '', description: '' }
-    errores.value = {}
-    error.value = ''
-    mostrarModal.value = true
-}
+    form.value = destino ? { 
+        ...destino,
+        // Asegurar que tenemos los campos necesarios
+        place: destino.place || '',
+        country: destino.country || '',
+        description: destino.description || '',
+        visible_in_main_web: destino.visible_in_main_web || false,
+        image_id: destino.image?.id || null
+    } : { 
+        id: null, 
+        place: '', 
+        country: '', 
+        description: '', 
+        visible_in_main_web: false, 
+        image_id: null 
+    };
+    
+    // Resetear imagen temporal y preview
+    imagen.value = null;
+    imagenPreview.value = destino?.image?.url ? {
+        url: getImagenUrl(destino.image.url),
+        name: 'Imagen actual'
+    } : null;
+    
+    errores.value = {};
+    error.value = '';
+    mostrarModal.value = true;
+};
 
 const cerrarModal = () => {
-    mostrarModal.value = false
-    form.value = { id: null, name: '', description: '' }
-}
+    mostrarModal.value = false;
+    form.value = { 
+        id: null, 
+        place: '', 
+        country: '', 
+        description: '', 
+        visible_in_main_web: false, 
+        image_id: null 
+    };
+    imagen.value = null;
+    imagenPreview.value = null;
+};
 
+// const guardarDestino = async () => {
+//     errores.value = {}
+//     error.value = ''
+
+//     if (!form.value.place) errores.value.place = 'Nombre obligatorio'
+//     if (Object.keys(errores.value).length) return
+
+//     guardando.value = true
+//     try {
+//         let nuevaImageId = null
+//         let imagenAnteriorId = null
+
+//         if (form.value.id) {
+//             const response = await DestinoService.getDestinoDetails(form.value.id)
+//             imagenAnteriorId = response.data.data.image_id
+//         }
+
+//         if (imagen.value) {
+//             const formData = new FormData()
+//             formData.append('title', imagen.value.name)
+//             formData.append('url', imagen.value)
+
+//             const res = await ImagenService.postImagen(formData)
+//             nuevaImageId = res.data.data.id
+//             form.value.image_id = nuevaImageId
+//         }
+
+//         const payload = {
+//             place: form.value.place,
+//             country: form.value.country,
+//             description: form.value.description,
+//             visible_in_main_web: form.value.visible_in_main_web,
+//             image_id: form.value.image_id,
+//         }
+//         if (form.value.id) {
+//             await DestinoService.patchDestino(form.value.id, payload)
+//             if (nuevaImageId && imagenAnteriorId && nuevaImageId !== imagenAnteriorId) {
+//                 await ImagenService.deleteImagen(imagenAnteriorId)
+//             }
+
+//             showSuccess('Actualizado correctamente')
+//         } else {
+//             await DestinoService.postDestino(payload)
+//             showSuccess('Creado correctamente')
+//         }
+
+//         imagen.value = null
+//         await obtenerDestinos()
+//         cerrarModal()
+//     // } catch (err) {
+//     //     error.value = parseError(err)
+//     //     showError('Error al guardar', error.value)
+//     // } finally {
+//     //     guardando.value = false
+//     // }
+//     } catch (err) {
+//         if (err.response && err.response.status === 422) {
+//             console.error('Errores de validación:', err.response.data.errors)
+//         }
+//         error.value = parseError(err)
+//         showError('Error al guardar', error.value)
+//     } finally {
+//         guardando.value = false
+//     }
+// }
 const guardarDestino = async () => {
-    errores.value = {}
-    error.value = ''
+    errores.value = {};
+    error.value = '';
 
-    if (!form.value.place) errores.value.place = 'Nombre obligatorio'
-    if (Object.keys(errores.value).length) return
+    // Validaciones básicas
+    if (!form.value.place) errores.value.place = 'Nombre obligatorio';
+    if (Object.keys(errores.value).length) return;
 
-    guardando.value = true
+    guardando.value = true;
+    
     try {
-        let nuevaImageId = null
-        let imagenAnteriorId = null
+        // 1. Manejo de la imagen
+        let imageOperation = {
+            newImageId: null,
+            oldImageId: form.value.id ? form.value.image_id : null
+        };
 
-        if (form.value.id) {
-            const response = await DestinoService.getDestinoDetails(form.value.id)
-            imagenAnteriorId = response.data.data.image_id
-        }
-
+        // Solo procesar imagen si se subió una nueva
         if (imagen.value) {
-            const formData = new FormData()
-            formData.append('title', imagen.value.name)
-            formData.append('url', imagen.value)
+            const formData = new FormData();
+            formData.append('title', `destino-${Date.now()}`);
+            formData.append('url', imagen.value);
 
-            const res = await ImagenService.postImagen(formData)
-            nuevaImageId = res.data.data.id
-            form.value.image_id = nuevaImageId
+            const res = await ImagenService.postImagen(formData);
+            imageOperation.newImageId = res.data.data.id;
         }
 
+        // 2. Preparar payload según el tipo de operación
         const payload = {
             place: form.value.place,
             country: form.value.country,
             description: form.value.description,
             visible_in_main_web: form.value.visible_in_main_web,
-            image_id: form.value.image_id,
-        }
+            ...(imageOperation.newImageId && { image_id: imageOperation.newImageId })
+        };
+
+        // 3. Operación de guardado
         if (form.value.id) {
-            await DestinoService.patchDestino(form.value.id, payload)
-            if (nuevaImageId && imagenAnteriorId && nuevaImageId !== imagenAnteriorId) {
-                await ImagenService.deleteImagen(imagenAnteriorId)
+            // Actualización
+            await DestinoService.patchDestino(form.value.id, payload);
+            
+            // Eliminar imagen anterior solo después de confirmar la actualización
+            if (imageOperation.newImageId && imageOperation.oldImageId) {
+                try {
+                    await ImagenService.deleteImagen(imageOperation.oldImageId);
+                } catch (deleteError) {
+                    console.error("Error eliminando imagen anterior:", deleteError);
+                }
             }
-
-            showSuccess('Actualizado correctamente')
+            
+            showSuccess('Destino actualizado correctamente');
         } else {
-            await DestinoService.postDestino(payload)
-            showSuccess('Creado correctamente')
+            // Creación - validar que tenga imagen
+            if (!imageOperation.newImageId) {
+                throw new Error('Debes subir una imagen para el nuevo destino');
+            }
+            
+            await DestinoService.postDestino(payload);
+            showSuccess('Destino creado correctamente');
         }
 
-        imagen.value = null
-        await obtenerDestinos()
-        cerrarModal()
-    // } catch (err) {
-    //     error.value = parseError(err)
-    //     showError('Error al guardar', error.value)
-    // } finally {
-    //     guardando.value = false
-    // }
+        // 4. Limpiar y actualizar
+        await obtenerDestinos();
+        cerrarModal();
     } catch (err) {
-        if (err.response && err.response.status === 422) {
-            console.error('Errores de validación:', err.response.data.errors)
-        }
-        error.value = parseError(err)
-        showError('Error al guardar', error.value)
+        handleSaveError(err);
     } finally {
-        guardando.value = false
+        guardando.value = false;
     }
-}
-
+};
+const handleSaveError = (err) => {
+    if (err.response?.status === 422) {
+        const errors = err.response.data.errors;
+        // Manejar errores específicos de imagen
+        if (errors.url) {
+            error.value = `Error en la imagen: ${errors.url[0]}`;
+        } else {
+            error.value = Object.values(errors)
+                .flat()
+                .join(', ');
+        }
+    } else {
+        error.value = parseError(err);
+    }
+    showError('Error al guardar', error.value);
+};
 
 const eliminarDestino = async (destino) => {
     const confirmado = await showConfirm('¿Estás seguro?', 'Esta acción eliminará el registro.')

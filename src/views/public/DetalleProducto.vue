@@ -178,19 +178,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Carousel } from 'bootstrap'
-// import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
-// import { parseError } from '../../utils/parseError'
-// import { showSuccess, showError, showConfirm } from '../../utils/alert'
 import ProductoService from '../../services/ProductoService'
-// import ReservaService from '../../services/ReservaService'
 import ReservaModal from '../../components/Modal.vue'
-
-// import { initMercadoPago } from '@mercadopago/sdk-js'
-// const PUBLIC_KEY = 'APP_USR-6390295798809990-052017-dc06605093e6c341c43a8b35389da6aa-2441036561'
-
 
 
 
@@ -222,11 +214,6 @@ const tabs = [
     { name: 'requisitos', label: 'Requisitos' },
     { name: 'descripcion', label: 'Descripción' }
 ]
-
-// const options = {
-//     readOnly: true,
-// }
-
 
 
 const form = ref({
@@ -265,82 +252,12 @@ const goToSlide = (index) => {
     bsCarousel.to(index)
     activeIndex.value = index
 }
-
-// const abrirFormulario = () => {
-//     form.value = {
-//         id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
-//         status: '', total_price: '', start_date: '', end_date: '',
-//     }
-//     errores.value = {}
-//     error.value = ''
-//     mostrarModal.value = true
-// }
-// const cerrarModal = () => {
-//     mostrarModal.value = false
-//     form.value = {
-//         id: null, user_id: null, product_id: null, reservation_date: '', number_of_people: '',
-//         status: '', total_price: '', start_date: '', end_date: '',
-//     }
-// }
-// const guardarReserva = async () => {
-//     errores.value = {}
-//     error.value = ''
-//     if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatorio'
-//     if (Object.keys(errores.value).length) return
-//     const payload = {
-//         user_id: 1,
-//         product_id: tour.value.id,
-//         reservation_date: today,
-//         number_of_people: form.value.number_of_people,
-//         status: 'pendiente',
-//         total_price: (form.value.number_of_people * tour.value.price_PEN),
-//         start_date: form.value.start_date,
-//         end_date: form.value.end_date,
-//     }
-//     console.log(payload)
-//     guardando.value = true
-//     try {
-//         await ReservaService.postReservation(payload)
-//         showSuccess('Creado correctamente')
-//         cerrarModal()
-//     } catch (err) {
-//         error.value = parseError(err)
-//         showError('Error al guardar', error.value)
-//     } finally {
-//         guardando.value = false
-//     }
-// }
-
 const goToReservation = () => {
     if (tour.value && tour.value.slug) {
         router.push({ name: 'ReservacionProducto', params: { slug: tour.value.slug } })
     }
 }
 
-// const realizarPago = async () => {
-//   try {
-//     const payload = {
-//       title: tour.value.name,
-//       price: parseFloat(tour.value.price_PEN)
-//     }
-
-//     const response = await ReservaService.createPaymentPreference(payload)
-//     const preferenceId = response.data.id
-
-//     initMercadoPago(PUBLIC_KEY)
-//     const mp = new window.MercadoPago(PUBLIC_KEY, { locale: 'es-PE' })
-
-//     mp.checkout({
-//       preference: {
-//         id: preferenceId
-//       },
-//       autoOpen: true
-//     })
-//   } catch (error) {
-//     console.error('Error al crear la preferencia de pago:', error)
-//     showError('No se pudo generar el pago', error.message)
-//   }
-// }
 
 onMounted(() => {
     obtenerProducto();

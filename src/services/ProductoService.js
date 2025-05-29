@@ -3,17 +3,17 @@ import apiClient from '@/axios'
 export default {
   // Obtener todos los productos
   getProductos() {
-    return apiClient.get('/productos')
+    return apiClient.get('/products')
   },
 
   // Obtener un producto específico
   getProducto(id) {
-    return apiClient.get(`/productos/${id}`)
+    return apiClient.get(`/products/${id}`)
   },
 
   // Crear nuevo producto
   postProducto(producto) {
-    return apiClient.post('/productos', producto,{
+    return apiClient.post('/products', producto,{
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -22,7 +22,7 @@ export default {
 
   // Actualizar producto existente
   patchProducto(id, producto) {
-    return apiClient.post(`/productos/${id}`, producto,{
+    return apiClient.post(`/products/${id}`, producto,{
             headers: { 
                 "Content-Type": "multipart/form-data",
                 "X-HTTP-Method-Override": "PATCH",
