@@ -26,7 +26,7 @@
                             <button class="btn btn-sm btn-outline-warning me-2" @click.stop="abrirFormulario(item)">
                                 <i class="bi bi-pencil" />
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" @click.stop="eliminarCategoria(item.id)">
+                            <button class="btn btn-sm btn-outline-danger" @click.stop="eliminarRerva(item.id)">
                                 <i class="bi bi-trash" />
                             </button>
                         </td>
@@ -36,29 +36,76 @@
         </div>
 
         <!-- MODAL -->
-        <!-- <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
-            <h5 class="mb-3">{{ form.id ? 'Editar' : 'Nueva' }} Categoría</h5>
-            <form @submit.prevent="guardarReserva">
-                <div class="mb-2">
-                    <label class="form-label">Nombre</label>
-                    <input v-model="form.name" type="text" class="form-control" />
-                    <div v-if="errores.name" class="text-danger small">{{ errores.name }}</div>
-                </div>
+       <ReservaModal :show="mostrarModal" :on-close="cerrarModal">
+  <h5 class="mb-3">{{ form.id ? 'Editar' : 'Nueva' }} Reserva</h5>
+  <form @submit.prevent="guardarReserva">
+    <div class="mb-2">
+      <label class="form-label">ID Reserva</label>
+      <input v-model="form.id" type="text" class="form-control" disabled />
+    </div>
 
-                <div class="mb-2">
-                    <label class="form-label">Descripción</label>
-                    <textarea v-model="form.description" class="form-control" rows="2" />
-                </div>
-                
-                <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" class="btn btn-success" :disabled="guardando">
-                        <span v-if="guardando" class="spinner-border spinner-border-sm me-1" />Guardar
-                    </button>
-                    <button type="button" class="btn btn-outline-light" @click="cerrarModal">Cancelar</button>
-                </div>
-                <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
-            </form>
-        </ReservaModal> -->
+    <div class="mb-2">
+      <label class="form-label">Usuario que reservó</label>
+      <input
+        type="text"
+        class="form-control"
+        :value="form.user ? form.user.names + ' ' + form.user.last_names : ''"
+        disabled
+      />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Producto</label>
+      <input
+        type="text"
+        class="form-control"
+        :value="form.product ? form.product.name:'Tour Generico'"
+        disabled
+      />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Fecha de Reserva</label>
+      <input v-model="form.reservation_date" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Número de Personas</label>
+      <input v-model="form.number_of_people" type="number" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Estado</label>
+      <input v-model="form.status" type="text" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Precio Total</label>
+      <input v-model="form.total_price" type="number" step="0.01" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Fecha Inicio</label>
+      <input v-model="form.start_date" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Fecha Fin</label>
+      <input v-model="form.end_date" type="date" class="form-control" />
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+      <button type="submit" class="btn btn-success" :disabled="guardando">
+        <span v-if="guardando" class="spinner-border spinner-border-sm me-1" />Guardar
+      </button>
+      <button type="button" class="btn btn-outline-light" @click="cerrarModal">Cancelar</button>
+    </div>
+
+    <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
+  </form>
+</ReservaModal>
+
+
     </div>
 </template>
 
@@ -103,96 +150,104 @@ const obtenerReservas = async () => {
     }
 }
 
-// const abrirFormulario = (reserva = null) => {
-//     if (reserva) {
-//         form.value = {
-//             ...reserva,
-//         }
-//     } else {
-//         form.value = {
-//             id: null,
-//             user_id: null,
-//             product_id: null,
-//             reservation_date: '',
-//             number_of_people: '',
-//             status: '',
-//             total_price: '',
-//             start_date: '',
-//             end_date: '',
-//         }
-//     }
+const abrirFormulario = (reserva = null) => {
+    if (reserva) {
+        form.value = {
+            ...reserva,
+        }
+    } else {
+        form.value = {
+            id: null,
+    user_id: null,
+    product_id: null,
+    reservation_date: '',
+    number_of_people: '',
+    status: '',
+    total_price: '',
+    start_date: '',
+    end_date: '',
+        }
+    }
 
-//     errores.value = {}
-//     error.value = ''
-//     mostrarModal.value = true
-// }
+    errores.value = {}
+    error.value = ''
+    mostrarModal.value = true
+}
 
 
-// const cerrarModal = () => {
-//     mostrarModal.value = false
-//     form.value = { id: null,
-//     user_id: null,
-//     product_id: null,
-//     reservation_date: '',
-//     number_of_people: '',
-//     status: '',
-//     total_price: '',
-//     start_date: '',
-//     end_date: '', }
-// }
+const cerrarModal = () => {
+    mostrarModal.value = false
+    form.value = {id: null,
+    user_id: null,
+    product_id: null,
+    reservation_date: '',
+    number_of_people: '',
+    status: '',
+    total_price: '',
+    start_date: '',
+    end_date: '', }
+}
 
-// const guardarReserva = async () => {
-//     errores.value = {}
-//     error.value = ''
+const guardarReserva = async () => {
+    errores.value = {};
+    error.value = '';
 
-//     if (!form.value.name) errores.value.name = 'Nombre obligatorio'
-//     if (Object.keys(errores.value).length) return
+    // Validaciones mínimas
+    if (!form.value.product_id) errores.value.product_id = 'Producto obligatorio';
+    if (!form.value.number_of_people) errores.value.number_of_people = 'Número de personas obligatorio';
+    if (!form.value.start_date) errores.value.start_date = 'Fecha de inicio obligatoria';
+    if (!form.value.end_date) errores.value.end_date = 'Fecha de fin obligatoria';
+    if (!form.value.total_price) errores.value.total_price = 'Precio total obligatorio';
 
-//     const nombreNormalizado = form.value.name.trim().toLowerCase()
+    if (Object.keys(errores.value).length) return;
 
-//     const payload = {
-//         name: nombreNormalizado,
-//         slug: nombreNormalizado
-//             .normalize('NFD')
-//             .replace(/[\u0300-\u036f]/g, '')
-//             .replace(/[^a-z0-9\s-]/g, '')
-//             .replace(/\s+/g, '-')
-//             .replace(/-+/g, '-'),
-//         description: form.value.description,
-//         parent_id: form.value.parent_id?.id || null,
-//     }
+    // Construcción del payload
+    const payload = {
+        user_id: form.value.user_id, // este puede venir oculto o prellenado
+        product_id: form.value.product_id,
+        reservation_date: form.value.reservation_date || new Date().toISOString().split('T')[0],
+        number_of_people: parseInt(form.value.number_of_people),
+        status: form.value.status || 'pendiente',
+        total_price: parseFloat(form.value.total_price),
+        start_date: form.value.start_date,
+        end_date: form.value.end_date,
+    };
 
-//     guardando.value = true
+    guardando.value = true;
 
-//     try {
-//         if (form.value.id) {
-//             await CategoryService.patchCategory(form.value.id, payload)
-//             showSuccess('Actualizado correctamente')
-//         } else {
-//             await CategoryService.postCategory(payload)
-//             showSuccess('Creado correctamente')
-//         }
-//         await obtenerCategorias()
-//         cerrarModal()
-//     } catch (err) {
-//         error.value = parseError(err)
-//         showError('Error al guardar', error.value)
-//     } finally {
-//         guardando.value = false
-//     }
-// }
+    try {
+        if (form.value.id) {
+            // Actualizar reserva existente
+            await ReservaService.patchReservation(form.value.id, payload);
+            showSuccess('Reserva actualizada correctamente');
+        } else {
+            // Crear nueva reserva
+            await ReservaService.postReservation(payload);
+            showSuccess('Reserva creada correctamente');
+        }
 
-// const eliminarCategoria = async (id) => {
-//     const confirmado = await showConfirm('¿Estás seguro?', 'Esta acción eliminará el registro.')
-//     if (!confirmado) return
-//     try {
-//         await CategoryService.deleteCategory(id)
-//         await obtenerCategorias()
-//         showSuccess('Eliminado correctamente')
-//     } catch (err) {
-//         showError('Error al eliminar', parseError(err))
-//     }
-// }
+        await obtenerReservas(); // recargar lista de reservas si tienes este método
+        cerrarModal();
+    } catch (err) {
+        error.value = parseError(err);
+        showError('Error al guardar la reserva', error.value);
+    } finally {
+        guardando.value = false;
+    }
+};
+
+
+ const eliminarRerva = async (id) => {
+     const confirmado = await showConfirm('¿Estás seguro?', 'Esta acción eliminará el registro.')
+     if (!confirmado) return
+     try {
+         await ReservaService.deleteReservation(id)
+         await obtenerReservas()
+         showSuccess('Eliminado correctamente')
+     } catch (err) {
+         showError('Error al eliminar', parseError(err))
+     }
+ }
 
 onMounted(obtenerReservas)
 </script>

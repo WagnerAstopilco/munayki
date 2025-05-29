@@ -15,7 +15,7 @@
         <div class="carousel-inner">
           <div class="carousel-item" :class="{ active: index === 0 }" v-for="(slide, index) in banner.mainCarrusell"
             :key="index">
-            <img :src="slide.image" class="d-block w-100" alt="...">
+            <img :src="getImagenUrl(slide.image)" class="d-block w-100" alt="...">
             <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
               style="z-index: 10; width: 100%;">
               <h2 class="h1">
@@ -367,6 +367,7 @@ const obtenerToursFavoritos=async ()=>{
 
 const getImagenUrl = (imagen) => {
     if (imagen) {
+      console.log(imagen);
         return process.env.VUE_APP_API_URL + "/storage/" + imagen;
     }
 }
